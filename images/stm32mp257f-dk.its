@@ -1,0 +1,53 @@
+/*
+ * U-Boot FIT Image Source — QNX 8 on STM32MP257F-DK
+ *
+ * Build:
+ *   mkimage -f stm32mp257f-dk.its fitImage-qnx
+ *
+ * The IFS binary and DTB must be present in the images/ directory:
+ *   images/stm32mp257f-dk.ifs
+ *   images/stm32mp257f-dk.dtb  (copy from Linux kernel / TF-A tree)
+ */
+/dts-v1/;
+
+/ {
+	description = "QNX 8 FIT image for STM32MP257F-DK";
+	#address-cells = <1>;
+
+	images {
+		kernel@qnx {
+			description = "QNX 8 IFS";
+			data = /incbin/("stm32mp257f-dk.ifs");
+			type = "kernel";
+			arch = "arm64";
+			os = "qnx";
+			compression = "none";
+			load = <0xC0100000>;
+			entry = <0xC0100000>;
+			hash@1 {
+				algo = "crc32";
+			};
+		};
+
+		fdt@stm32mp257f-dk {
+			description = "STM32MP257F-DK Device Tree";
+			data = /incbin/("stm32mp257f-dk.dtb");
+			type = "flat_dt";
+			arch = "arm64";
+			compression = "none";
+			hash@1 {
+				algo = "crc32";
+			};
+		};
+	};
+
+	configurations {
+		default = "config@stm32mp257f-dk";
+
+		config@stm32mp257f-dk {
+			description = "QNX 8 + STM32MP257F-DK DTB";
+			kernel = "kernel@qnx";
+			fdt = "fdt@stm32mp257f-dk";
+		};
+	};
+};

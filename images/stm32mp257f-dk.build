@@ -1,0 +1,71 @@
+# =============================================================================
+# QNX 8 IFS Build Script — STM32MP257F-DK
+# Architecture : AArch64 (dual Cortex-A35), little-endian, SMP
+# Usage        : mkifs stm32mp257f-dk.build stm32mp257f-dk.ifs
+# =============================================================================
+
+[image=0xC0100000]
+[virtual=aarch64le,+smp]
+[+compress]
+
+###############################################################################
+# STARTUP
+# -v        : verbose
+# -r base,size : RAM region hint (4 GB LPDDR4 @ 0x80000000)
+###############################################################################
+[+keeplinked]
+startup-stm32mp257f-dk -v -r 0x80100000,0x100000000
+
+###############################################################################
+# KERNEL
+###############################################################################
+[module=procnto]
+procnto-smp-instr
+
+###############################################################################
+# BOOT SCRIPT
+###############################################################################
+[+script] .script = {
+    display_msg "QNX 8.0 — STM32MP257F-DK"
+
+    # Symlink dynamic linker
+    procmgr_symlink ../../proc/boot/libc.so.5 /usr/lib/ldqnx-64.so.2
+
+    # UART4 serial console  (64 MHz source clock, IRQ 59)
+    devc-ser-stm32 -e -F -S -c 64000000 0x40010000,59 &
+    waitfor /dev/ser1 3
+    reopen /dev/ser1
+
+    display_msg "[devc-ser-stm32] console ready"
+
+    # Seed entropy
+    random -t &
+
+    # Mount sysfs-like proc
+    mount -t proc /proc
+
+    # Interactive shell
+    [+session] sh &
+}
+
+###############################################################################
+# SHARED LIBRARIES  (resolved from QNX SDP 8 target tree)
+###############################################################################
+[search=${QNX_TARGET}/aarch64le/lib]
+libc.so.5
+libm.so.3
+
+[search=${QNX_TARGET}/aarch64le/usr/lib]
+ldqnx-64.so.2
+
+###############################################################################
+# BINARIES
+###############################################################################
+[search=${QNX_TARGET}/aarch64le/bin]
+sh
+ls
+cat
+echo
+
+[search=${QNX_TARGET}/aarch64le/sbin]
+random

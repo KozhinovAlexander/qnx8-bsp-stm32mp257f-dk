@@ -1,0 +1,21 @@
+# =============================================================================
+# U-Boot environment for QNX 8 on STM32MP257F-DK
+# Flash with:  fw_setenv -s qnx-uboot-env.txt
+# =============================================================================
+
+bootdelay=3
+bootcmd=run qnxboot
+
+# ── Load addresses ────────────────────────────────────────────────────────────
+kernel_addr_r=0xC0000000
+fdt_addr_r=0xCF000000
+
+# ── eMMC boot ─────────────────────────────────────────────────────────────────
+# Reads 8192 sectors (4 MiB) from eMMC device 0, partition 1 at sector 0x800
+qnxboot=mmc dev 0; mmc read ${kernel_addr_r} 0x800 0x2000; bootm ${kernel_addr_r}
+
+# ── TFTP boot (development / bring-up) ───────────────────────────────────────
+qnxboot_tftp=dhcp; tftp ${kernel_addr_r} fitImage-qnx; bootm ${kernel_addr_r}
+
+# ── SD card boot ─────────────────────────────────────────────────────────────
+qnxboot_sd=mmc dev 1; mmc read ${kernel_addr_r} 0x800 0x2000; bootm ${kernel_addr_r}
