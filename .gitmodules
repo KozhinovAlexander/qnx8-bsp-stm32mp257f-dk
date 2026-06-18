@@ -1,0 +1,19 @@
+[submodule "u-boot"]
+	path = u-boot
+	url = https://github.com/STMicroelectronics/u-boot
+	branch = v2023.10-stm32mp-r3.1
+[submodule "stm32-ddr-phy-binary"]
+	path = stm32-ddr-phy-binary
+	url = https://github.com/STMicroelectronics/stm32-ddr-phy-binary.git
+	branch = v1.0-stm32mp
+[submodule "arm-trusted-firmware"]
+	path = arm-trusted-firmware
+	url = https://github.com/STMicroelectronics/arm-trusted-firmware.git
+[submodule "dt-stm32mp"]
+	path = dt-stm32mp
+	url = https://github.com/STMicroelectronics/dt-stm32mp.git
+	branch = v6-stm32mp
+[submodule "optee_os"]
+	path = optee_os
+	branch = 4.0.0-stm32mp
+	url = https://github.com/STMicroelectronics/optee_os.git
