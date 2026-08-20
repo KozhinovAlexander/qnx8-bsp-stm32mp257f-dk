@@ -3,7 +3,28 @@
 Board Support Package for **QNX Neutrino RTOS 8.0** targeting the
 **STM32MP257F-DK Discovery Kit** (STMicroelectronics).
 
----
+Please refer first to [**Getting Started Guide**](./docs/getting_started.md) to provide necessary manual installation steps.
+
+- [QNX 8 BSP for STM32MP257F-DK](#qnx-8-bsp-for-stm32mp257f-dk)
+  - [Configure project](#configure-project)
+  - [Hardware](#hardware)
+  - [Boot Flow](#boot-flow)
+  - [Repository Layout](#repository-layout)
+  - [Prerequisites](#prerequisites)
+  - [Building](#building)
+    - [Individual targets](#individual-targets)
+  - [Flashing \& Booting](#flashing--booting)
+    - [Development — TFTP boot (recommended for bring-up)](#development--tftp-boot-recommended-for-bring-up)
+    - [Production — boot from eMMC](#production--boot-from-emmc)
+  - [Driver Bring-up Priority](#driver-bring-up-priority)
+  - [Key Addresses (STM32MP257)](#key-addresses-stm32mp257)
+  - [References](#references)
+  - [License](#license)
+
+
+## Configure project
+
+After cloning this project refer to [Getting Started](./docs/getting_started.md) Guide to setup the development environment.
 
 ## Hardware
 
@@ -21,6 +42,8 @@ Board Support Package for **QNX Neutrino RTOS 8.0** targeting the
 ---
 
 ## Boot Flow
+
+Please refer to [U-Boot STM32 documentation][_stm32_u_boot_] for more information.
 
 ```
 Power-on
@@ -181,3 +204,6 @@ reset
 
 This BSP skeleton is provided as a starting point for porting QNX 8 to the
 STM32MP257F-DK. Adapt and extend as required for your project.
+
+
+[_stm32_u_boot_]: https://wiki.st.com/stm32mpu/wiki/U-Boot

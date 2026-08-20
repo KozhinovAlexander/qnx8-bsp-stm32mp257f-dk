@@ -1,0 +1,25 @@
+List of files: 
+ arm-trusted-firmware
+       FW_config : <PATH>/arm-trusted-firmware/fwconfig/stm32mp257f-dk-fw-config-opteemin-sdcard.dtb
+         BL31_fw : <PATH>/arm-trusted-firmware/bl31/tf-a-bl31-stm32mp257f-dk-opteemin-sdcard.bin
+        BL31_dtb : <PATH>/arm-trusted-firmware/bl31/stm32mp257f-dk-bl31-opteemin-sdcard.dtb
+          DDR_fw : <PATH>/arm-trusted-firmware/ddr/ddr_pmu-stm32mp257f-dk-opteemin-sdcard.bin
+ optee-os
+    Optee_header : <PATH>/optee/tee-header_v2-stm32mp257f-dk-opteemin-programmer.bin
+     Optee_pager : <PATH>/optee/tee-pager_v2-stm32mp257f-dk-opteemin-programmer.bin
+  Optee_pageable : <PATH>/optee/tee-pageable_v2-stm32mp257f-dk-opteemin-programmer.bin
+ U-Boot  
+       U-BOOT_FW : <PATH>/u-boot/u-boot-nodtb-stm32mp25-fastboot-sdcard.bin
+      U-BOOT_dtb : <PATH>/u-boot/u-boot-stm32mp257f-dk-fastboot-sdcard.dtb
+Fip tool command:
+CMD> fiptool create   \ 
+	--fw-config <PATH>/arm-trusted-firmware/fwconfig/stm32mp257f-dk-fw-config-opteemin-sdcard.dtb \ 
+	--soc-fw <PATH>/arm-trusted-firmware/bl31/tf-a-bl31-stm32mp257f-dk-opteemin-sdcard.bin \ 
+	--soc-fw-config <PATH>/arm-trusted-firmware/bl31/stm32mp257f-dk-bl31-opteemin-sdcard.dtb \ 
+	--ddr-fw <PATH>/arm-trusted-firmware/ddr/ddr_pmu-stm32mp257f-dk-opteemin-sdcard.bin \ 
+	--tos-fw <PATH>/optee/tee-header_v2-stm32mp257f-dk-opteemin-programmer.bin \ 
+	--tos-fw-extra1 <PATH>/optee/tee-pager_v2-stm32mp257f-dk-opteemin-programmer.bin \ 
+	--tos-fw-extra2 <PATH>/optee/tee-pageable_v2-stm32mp257f-dk-opteemin-programmer.bin \ 
+	--nt-fw <PATH>/u-boot/u-boot-nodtb-stm32mp25-fastboot-sdcard.bin \ 
+	--hw-config <PATH>/u-boot/u-boot-stm32mp257f-dk-fastboot-sdcard.dtb   \ 
+	<PATH>/fip/fip-stm32mp257f-dk-fastboot-opteemin-sdcard.bin

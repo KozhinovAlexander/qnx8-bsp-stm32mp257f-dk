@@ -1,0 +1,5 @@
+#Opt	Id	Name	Type	IP	Offset	Binary
+-	0x01	fsbl-boot	Binary	none	0x0	arm-trusted-firmware/tf-a-stm32mp257f-dk-opteemin-programmer-usb.stm32
+-	0x02	fip-ddr	FIP	none	0x0	fip/fip-stm32mp257f-dk-ddr-opteemin-programmer-usb.bin
+-	0x03	fip-boot	FIP	none	0x0	fip/fip-stm32mp257f-dk-opteemin-programmer-usb.bin
+PED	0x15	sdcardall	RawImage	mmc0	0x0	none

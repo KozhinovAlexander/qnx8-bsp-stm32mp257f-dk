@@ -1,0 +1,7 @@
+List of files: 
+ arm-trusted-firmware
+          DDR_fw : <PATH>/arm-trusted-firmware/ddr/ddr_pmu-stm32mp257f-dk-opteemin-sdcard.bin
+Fip tool command:
+CMD> fiptool create   \ 
+	--ddr-fw <PATH>/arm-trusted-firmware/ddr/ddr_pmu-stm32mp257f-dk-opteemin-sdcard.bin   \ 
+	<PATH>/fip/fip-stm32mp257f-dk-ddr-fastboot-opteemin-sdcard.bin
