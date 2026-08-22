@@ -1,0 +1,39 @@
+imx8x options:
+
+Notes for host-specific (hs) options:
+-----------------------------------
+hs options: all options are separated by colons
+
+'sdll'                           : Strobe DLL Control Slave Delay Target. Can be programmed in
+                                   1/16th increments of a STROBE_REF_CLOCK half-period(Default: 7).
+'tuning_mode=[manual|standard]'  : Tuning algorithm to use (Default: manual).
+'std_tuning_cfg=
+[tuning_step]^[tuning_start_tap]': Standard tuning configartion (Default: 2^20).
+
+
+Notes for board-specific (bs) options:
+-----------------------------------
+bs Options: All options are separated by colons
+
+'nocd'                      : Card-detect is not activated.
+'cd_base'                   : Card-detect I/O base address.
+'cd_pin'                    : Card-detect I/O bit number.
+'cd_irq'                    : Card-detect GPIO IRQ, obtained from the interrupt map.
+                              If not set, it works in non-interrupt mode.
+'cd'                        : One option to specify all card-detect options;
+                              (FORMAT: cd=cd_base^cd_pin^cd_irq)
+'wp_base'                   : Write-protect I/O base address.
+'wp_pin'                    : Write-protect I/O bit number.
+'wp'                        : One option to specify all write-protect options;
+                              (FORMAT: wp=wp_base^wp_pin)
+'vdd1_8'                    : 1.8 V support capability.
+'rs_base'                   : Reset I/O base address.
+'rs_pin'                    : Reset I/O bit number.
+'rs_irq'                    : Reset GPIO IRQ, obtained from the interrupt map.
+
+Example:
+-----------------------------------
+devb-sdmmc-mx8x cam cache blk cache=2M sdio addr=0x5B020000,irq=265 disk name=sd0
+
+using standard tunning with tuning_step = 2 and tuning_start_tap = 20.
+devb-sdmmc-mx8x cam cache,quiet blk ra=64k:2048k,memory="sysram&below4G:sysram",maxio=256,cache=4m disk name=emmc sdio idx=0,emmc,bw=8,hs=sdll=7:tuning_mode=standard:std_tuning_cfg=2^20,verbose=1

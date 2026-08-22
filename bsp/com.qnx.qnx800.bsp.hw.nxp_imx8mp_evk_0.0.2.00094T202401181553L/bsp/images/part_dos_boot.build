@@ -1,0 +1,7 @@
+# The DOS partition only needs to be large enough to hold the IFS
+# Set the DOS partition (t12) to 200MB in this example
+[num_sectors=409600]
+
+# Create the boot image with the name required by your board's firmware
+qnx-ifs=./qnx-ifs
+

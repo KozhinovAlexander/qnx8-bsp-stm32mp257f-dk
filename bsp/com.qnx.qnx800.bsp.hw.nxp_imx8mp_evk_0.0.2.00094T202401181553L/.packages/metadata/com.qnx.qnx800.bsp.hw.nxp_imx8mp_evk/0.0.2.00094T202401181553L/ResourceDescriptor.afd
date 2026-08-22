@@ -1,0 +1,40 @@
+{
+  "descriptorVersion": "1.1",
+  "type": "bsp",
+  "payloadFormat": "qnx.sw.fileset",
+  "authorId": "com.qnx",
+  "authorName": "BlackBerry Limited",
+  "id": "com.qnx.qnx800.bsp.hw.nxp_imx8mp_evk",
+  "name": "QNX® SDP 8.0 BSP for NXP i.MX 8M Plus",
+  "version": "0.0.2.00094T202401181553L",
+  "locale": "en",
+  "properties": {
+    "com.qnx.category": "BSP & Drivers",
+    "f.subsystem": "BSP & Drivers",
+    "com.qnx.status": "lookup",
+    "com.qnx.marketingVersion": "8.0 Build 94 - January 18, 2024",
+    "com.qnx.buildTag": "jenkins-BSP_nxp-imx8mp-evk_br-hw-rel_be-800-94",
+    "com.qnx.buildNumber": "94",
+    "com.qnx.buildTimestamp": "202401181553",
+    "product": "QNX Software Development Platform"
+  },
+  "baselines": [
+    "qnx800"
+  ],
+  "filter": "(qnx.target.aarch64le=true)",
+  "provides": [
+    "buildversion: com.qnx.qnx800.bsp.hw.nxp_imx8mp_evk (8.0.94)",
+    "primary: com.qnx.qnx800.bsp.hw.nxp_imx8mp_evk (0.0.2.094202401181553)"
+  ],
+  "requires": [
+    "package: com.qnx.qnx800.target.screen.device_input_screen",
+    "package: com.qnx.qnx800.target.screen.board.imx8mp",
+    "package: com.qnx.qnx800.target.screen.base",
+    "package: com.qnx.qnx800.target.screen.fonts.engine",
+    "package: com.qnx.qnx800.target.screen.img_codecs",
+    "package: com.qnx.qnx800.target.pci.hw.nxp_imx8m_cpu",
+    "package: com.qnx.qnx800.target.fs.flash3 (>= 0.0.2)",
+    "package: com.qnx.qnx800.target.drivers.flash (>= 0.0.2)",
+    "eula: qdl (0.4)"
+  ]
+}

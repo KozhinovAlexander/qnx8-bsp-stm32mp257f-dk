@@ -1,0 +1,5 @@
+NEEDS_FDT=yes
+define PINFO
+PINFO DESCRIPTION=STM32MP257F-DK Startup
+endef
+NAME=startup-stm32mp257f-dk

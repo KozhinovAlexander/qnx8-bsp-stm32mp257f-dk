@@ -1,0 +1,14 @@
+#!/bin/sh
+# script to build the image for SD or eMMC bootable device.
+set -v
+
+# Create the DOS partition image for IFS
+mkfatfsimg  -vv part_dos_boot.build part_dos_boot.img
+
+# Create the QNX6 partition image for data storage
+mkqnx6fsimg -vv part_qnx_data.build part_qnx_data.img
+
+# Create the USB disk image
+diskimage -o disk.img -c disk.cfg
+
+rm part_dos_boot.img part_qnx_data.img

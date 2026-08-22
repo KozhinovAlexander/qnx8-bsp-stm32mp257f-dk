@@ -1,0 +1,12 @@
+%C - Serial driver for i.MX UARTs
+
+%C [options] [port[,irq]] &
+%C specific options:
+ -t number    Set receive FIFO trigger level ( 0 - 32; default 24)
+ -T number    Set number of characters to send to transmit FIFO
+                                             ( 2 - 32; default 32)
+
+Examples:
+# Disable HW and SW flow control for an UART device with base address on 0x30890000 and IRQ 59
+# and enabled edited mode - useful for a debug port.
+%C -e -F -S -u 1 0x30890000,59
