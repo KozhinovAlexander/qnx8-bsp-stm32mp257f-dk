@@ -1,0 +1,1 @@
+For STM32CubeProgrammer FlashLayout wiki see: https://wiki.st.com/stm32mpu/wiki/STM32CubeProgrammer_flashlayout
