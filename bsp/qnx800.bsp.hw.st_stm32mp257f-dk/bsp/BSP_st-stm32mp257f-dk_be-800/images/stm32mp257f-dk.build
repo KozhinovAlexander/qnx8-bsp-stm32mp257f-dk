@@ -37,7 +37,7 @@
     ## If startup is given -W parameter then the wdtkick utility MUST be uncommented below
     ############################################################################################
     display_msg "Starting WatchDog ..."
-    wdtkick -W0x24:0x5A028E4C -W0x1c:0x5A000020
+    # wdtkick -W0x24:0x5A028E4C -W0x1c:0x5A000020
 
 
 
@@ -52,17 +52,17 @@
     ## Debug console serial driver
     #######################################################################
     display_msg "Starting serial driver (/dev/ser10)"
-    devc-serpl011-rpi5 -b115200 -c44236800 -e -F -u10 -D 0x107d001000^2,153
+    # devc-serpl011-rpi5 -b115200 -c44236800 -e -F -u10 -D 0x107d001000^2,153
 
 
     #######################################################################
     ## SPI driver
     #######################################################################
     display_msg "Starting SPI driver"
-    gpio-rp1 set 7-8 a0 pu
-    gpio-rp1 set 9-11 a0 pd
+    # gpio-rp1 set 7-8 a0 pu
+    # gpio-rp1 set 9-11 a0 pd
 
-    spi-dwc -c /etc/system/config/spi/spi.conf
+    # spi-dwc -c /etc/system/config/spi/spi.conf
 
 
 
@@ -127,13 +127,13 @@
 ################################################################################################
 ## WDT driver
 ################################################################################################
-/bin/wdtkick=wdtkick
+# /bin/wdtkick=wdtkick
 
 
 ################################################################################################
 ## Serial drivers
 ################################################################################################
-/sbin/devc-serpl011-rpi5=devc-serpl011-rpi5
+# /sbin/devc-serpl011-rpi5=devc-serpl011-rpi5
 
 
 ################################################################################################
@@ -147,7 +147,7 @@
 ################################################################################################
 ## Block drivers
 ################################################################################################
-# /sbin/devb-sdmmc-stm32mp257f=devb-sdmmc-stm32mp257f
+# /sbin/devb-sdmmc-bcm2712=devb-sdmmc-bcm2712
 
 ################################################################################################
 ## Block driver support libraries
@@ -335,7 +335,7 @@ fi
 ################################################################################################
 ## I2C drivers
 ################################################################################################
-/sbin/i2c-dwc-rpi5=i2c-dwc-rpi5
+# /sbin/i2c-dwc-rpi5=i2c-dwc-rpi5
 
 ################################################################################################
 ## I2C support
@@ -427,7 +427,7 @@ PCI_DEBUG_MODULE=pci_debug2.so
 ################################################################################################
 ## SPI driver
 ################################################################################################
-/sbin/spi-dwc=spi-dwc
+# /sbin/spi-dwc=spi-dwc
 
 /etc/system/config/spi/spi.conf = {
 # See spi-template.conf or SDP docs for a full description of the configuration fields.
@@ -742,7 +742,7 @@ fi
 pci_server_start.sh = {
 #!/bin/sh
     echo "Starting PCI Server ..."
-    # PCI_HW_MODULE=/lib/dll/pci/pci_hw-stm32mp257f-dk.so
+    # PCI_HW_MODULE=/lib/dll/pci/pci_hw-bcm2712-rpi5.so
     # PCI_SLOG_MODULE=/lib/dll/pci/pci_slog2.so
     # PCI_DEBUG_MODULE=/lib/dll/pci/pci_debug2.so
     # pci-server --bus-scan-limit=3 -c
@@ -752,43 +752,43 @@ pci_server_start.sh = {
     # 1. MSIX vector and MSXI capability
     # 2. RPI MSIX_CFG_<6,8,19,31,36,43,45>
     # 3. MIP interrupt controller
-    sleep 1
-    msix-rp1 -i 6,8,19,31,36,43,45 &
+    # sleep 1
+    # msix-rp1 -i 6,8,19,31,36,43,45 &
 }
 
 usb_start.sh = {
 #!/bin/sh
   echo "Starting USB xHCI controller in the host mode (/dev/usb/*)..."
 
-  gpio-rp1 set 42 a2 pn
-  gpio-rp1 set 43 a2 pu
+  # gpio-rp1 set 42 a2 pn
+  # gpio-rp1 set 43 a2 pu
 
-  io-usb-otg -v -d dwc3-xhci ioport=0x1f00200000,irq=0xbf,iosize=0x100000,bmstr=0x1000000000,ioport=0x1f00300000,irq=0xc4,iosize=0x100000,bmstr=0x1000000000
-  waitfor /dev/usb/io-usb-otg 10
+  # io-usb-otg -v -d dwc3-xhci ioport=0x1f00200000,irq=0xbf,iosize=0x100000,bmstr=0x1000000000,ioport=0x1f00300000,irq=0xc4,iosize=0x100000,bmstr=0x1000000000
+  # waitfor /dev/usb/io-usb-otg 10
 }
 
 uart4_console.sh = {
   #!/bin/sh
   echo "Start uart4 (gpio12-pin32, gpio13-pin33) console"
 
-  gpio-rp1 set 12 a2 pn
-  gpio-rp1 set 13 a2 pu
+  # gpio-rp1 set 12 a2 pn
+  # gpio-rp1 set 13 a2 pu
 
-  devc-serpl011-rpi5 -b115200 -v -c50000000 -e -F -u4 0x1f00040000,0xcd &
-  waitfor /dev/ser4
-  on -t /dev/ser4 /bin/sh
+  # devc-serpl011-rpi5 -b115200 -v -c50000000 -e -F -u4 0x1f00040000,0xcd &
+  # waitfor /dev/ser4
+  # on -t /dev/ser4 /bin/sh
 }
 
 uart2_console.sh = {
   #!/bin/sh
   echo "Start uart2 (gpioi4-pin7, gpio5-pin29) console"
 
-  gpio-rp1 set 4 a2 pn
-  gpio-rp1 set 5 a2 pu
+  # gpio-rp1 set 4 a2 pn
+  # gpio-rp1 set 5 a2 pu
 
-  devc-serpl011-rpi5 -b115200 -v -c50000000 -e -F -u2 0x1f00038000,0xcb &
-  waitfor /dev/ser2
-  on -t /dev/ser2 /bin/sh
+  # devc-serpl011-rpi5 -b115200 -v -c50000000 -e -F -u2 0x1f00038000,0xcb &
+  # waitfor /dev/ser2
+  # on -t /dev/ser2 /bin/sh
 }
 
 ################################################################################################
@@ -799,7 +799,7 @@ net_start.sh = {
 #!/bin/sh
 
 # config ETH_RST_N/GPIO32 pin
-gpio-rp1 set 32 op pd dh
+# gpio-rp1 set 32 op pd dh
 
 ############################################################################################
 ## Network driver
@@ -867,33 +867,33 @@ fan_start.sh = {
 echo "Starting fan control driver"
 
 # gpio 45 is congiured as PWM1_CHAN3 to drive fan
-gpio-rp1 set 45 a0 pd
-fan-rpi5
-waitfor /dev/fan
-echo 200 > /dev/fan
+# gpio-rp1 set 45 a0 pd
+# fan-rpi5
+# waitfor /dev/fan
+# echo 200 > /dev/fan
 }
 
 ################################################################################################
 ## GPIO utility
 ################################################################################################
-/bin/gpio-aon-bcm=gpio-aon-bcm
-/bin/gpio-bcm=gpio-bcm
-/bin/gpio-rp1=gpio-rp1
+# /bin/gpio-aon-bcm=gpio-aon-bcm
+# /bin/gpio-bcm=gpio-bcm
+# /bin/gpio-rp1=gpio-rp1
 
 ################################################################################################
 ## Mailbox utility
 ################################################################################################
-/bin/mbox-bcm=mbox-bcm
+# /bin/mbox-bcm=mbox-bcm
 
 ################################################################################################
 ## RPI msix config utility
 ################################################################################################
-/sbin/msix-rp1=msix-rp1
+# /sbin/msix-rp1=msix-rp1
 
 ################################################################################################
 ## fan control resource manager
 ################################################################################################
-/sbin/fan-rpi5=fan-rpi5
+# /sbin/fan-rpi5=fan-rpi5
 
 ################################################################################################
 ## Wifi support

@@ -256,7 +256,10 @@ copy_boot_part_content:
 		sudo mount -a;
 
 # please refer to: https://www.qnx.com/developers/docs/BSP8.0/com.qnx.doc.bsp_raspberrypi.bcm2712.rpi5_8.0/topic/common/build_commandline.html
+# for make file flags refer to: https://www.qnx.com/developers/docs/6.5.0SP1.update/com.qnx.doc.neutrino_prog/make_convent.html#PARTIAL
 .PHONY: bsp_all
+EXCLUDE_FROM_BUILD_LIST := i2c spi SPI fan gpio-aon-bcm gpio-bcm gpio-rp1 mbox msix-rp1 devc devb support
+MAKE_LIST_EXCLUDE := LIST=CONTROL "EXCLUDE_CONTROLLIST=$(EXCLUDE_FROM_BUILD_LIST)"
 bsp_all:
 	@mkdir -p $(BSP_ROOT_DIR)/install
 	@source $(QNX_INSTALL_DIR)/qnxsdp-env.sh \
