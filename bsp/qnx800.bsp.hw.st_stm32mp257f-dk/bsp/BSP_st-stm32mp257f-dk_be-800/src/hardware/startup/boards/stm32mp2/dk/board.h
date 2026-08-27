@@ -34,19 +34,20 @@
 #define STM32MP2_RCC_BASE_ADDR		0x44200000
 
 /** Core counter input clock (in MHz) */
-#define STM32MP2_HSE_CLOCK_FREQ		40'000'000
+#define STM32MP2_HSE_CLOCK_FREQ		40000000
 
 /*!
  * @name QNX SDRAM memory configuration
  */
 /*@{*/
-/** SDRAM0 base address */
-#define STM32MP2_SDRAM0_BASE		0x80000000
-/** SDRAM0 size in bytes */
-#define STM32MP2_SDRAM0_SIZE		GIG(4UL)
+/** DRAM0 base address */
+#define STM32MP2_DRAM0_BASE		0x80000000
+/** DRAM0 size in bytes */
+#define STM32MP2_DRAM0_SIZE		GIG(4UL)
+
+/** DRAM0 TF-A stage size in bytes (BL2/BL31 etc.) */
+#define STM32MP2_DRAM0_TFA_SIZE		MEG(256UL)
 /*@}*/
-
-
 
 #endif  /* BOARD_H_ */
 

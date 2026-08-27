@@ -45,12 +45,14 @@ void stm32mp2_init_raminfo(void)
 {
     /*
      * 4GB RAM initialization:
-     * | ----------------------- 4 GB ----------------------- |
-     * | SDMA (4K) | RPMsg-lite (512K) | -- SYSRAM ---------- |
+     * |----------------------- 4 GB -----------------------|
+     * |-- 256MB ---|---------------- 3840MB ---------------|
+     * 256MB is used by TF-A.
+     * The remaining 3840MB is available for QNX.
      */
-    add_ram(STM32MP2_SDRAM0_BASE, STM32MP2_SDRAM0_SIZE);
+    add_ram(STM32MP2_DRAM0_BASE + STM32MP2_DRAM0_TFA_SIZE, STM32MP2_DRAM0_SIZE - STM32MP2_DRAM0_TFA_SIZE);
     /* Add 4 KB /memory/dma region. This region is not used by QNX and is dedicated to DMA. */
-    // as_add(IMX_SDRAM0_BASE, IMX_SDRAM0_BASE + KILO(4) - 1, AS_ATTR_NONE, "dma", as_default());
+    // as_add(STM32MP2_DRAM0_BASE, STM32MP2_DRAM0_BASE + KILO(4) - 1, AS_ATTR_NONE, "dma", as_default());
 }
 
 #if defined(__QNXNTO__) && defined(__USESRCVERSION)

@@ -32,15 +32,6 @@
  * @{
  */
 
-
-/** Startup global data structure */
-typedef struct {
-    uint32_t    chip_rev;                           /**< Processor revision */
-    uint32_t    chip_type;                          /**< Processor type */
-    // uint32_t    stm32mp2_uart_clock[IMX_UART_COUNT];     /**< Array of UART clocks used in HWI */
-    // uint32_t    stm32mp2_usdhc_clk[IMX_USDHC_COUNT];     /**< Array of USDHC clocks used in HWI */
-} stm32mp2_startup_data_t;
-
 extern void stm32mp2_init_uart(unsigned channel, const char *init, const char *defaults);
 extern void stm32mp2_uart_put_char(int);
 
@@ -49,6 +40,8 @@ extern struct callout_rtn stm32mp2_uart_poll_key;
 extern struct callout_rtn stm32mp2_uart_break_detect;
 
 void stm32mp2_init_raminfo(void);
+
+extern void init_pcie_ext_msi_controller(void);
 
 #endif /* STM32MP2_STARTUP_H_ */
 

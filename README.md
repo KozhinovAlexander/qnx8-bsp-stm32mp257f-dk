@@ -21,16 +21,16 @@ After cloning this project refer to [Getting Started](./docs/getting_started.md)
 
 ## Hardware
 
-| Component        | Details                                           |
-|------------------|---------------------------------------------------|
-| **SoC**          | STM32MP257FAK3                                    |
-| **CPU**          | Dual Cortex-A35 @ 1.5 GHz (AArch64) + Cortex-M33  |
-| **RAM**          | 4 GB LPDDR4                                       |
-| **Storage**      | 8 GB eMMC 5.1 + microSD                           |
-| **Debug UART**   | UART4 @ `0x40010000`, 115200 8N1 (via ST-LINK/V3) |
-| **GIC**          | GIC-600 (GICv3), GICD @ `0x58000000`              |
-| **Ethernet**     | Gigabit RGMII                                     |
-| **USB**          | USB 2.0 HS x2, USB 3.0 SuperSpeed Type-C          |
+| Component        | Details                                            | Implemented |
+|------------------|----------------------------------------------------|-------------|
+| **SoC**          | STM32MP257FAK3                                     |      x      |
+| **CPU**          | Dual Cortex-A35 @ 1.5 GHz (AArch64) + Cortex-M33   |      x      |
+| **RAM**          | 4 GB LPDDR4                                        |      v      |
+| **Storage**      | 16 GB eMMC 5.1 + microSD                           |      x      |
+| **Debug UART**   | USART2 @ `0x400e0000`, 115200 8N1 (via ST-LINK/V3) |      v      |
+| **GIC**          | GIC-600 (GICv3), GICD @ `0x58000000`               |      x      |
+| **Ethernet**     | Gigabit RGMII                                      |      x      |
+| **USB**          | USB 2.0 HS x2, USB 3.0 SuperSpeed Type-C           |      x      |
 
 ---
 

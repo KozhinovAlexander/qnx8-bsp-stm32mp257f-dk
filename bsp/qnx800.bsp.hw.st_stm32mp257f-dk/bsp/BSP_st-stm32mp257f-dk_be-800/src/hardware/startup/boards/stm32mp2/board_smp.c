@@ -33,7 +33,7 @@
  */
 
 typedef void send_ipi_t(struct syspage_entry *, unsigned, unsigned, unsigned *);
-static const unsigned board_smp_max_cpu = STM32MP2_CPU_CORES_NUMBER;
+
 extern void board_mmu_disable(void);
 
 static const uint64_t stm32mp2_core_affinity[6] = {
@@ -51,8 +51,7 @@ long        secondary_cpu;        /* CPU being woken up */
  */
 unsigned board_smp_num_cpu(void)
 {
-    kprintf("board_smp_num_cpu: %d cores\n", board_smp_max_cpu);
-    return board_smp_max_cpu;
+    return STM32MP2_CPU_CORES_NUMBER;
 }
 
 /**
@@ -63,7 +62,7 @@ unsigned board_smp_num_cpu(void)
  */
 void board_smp_init(struct smp_entry *smp, const unsigned num_cpus)
 {
-    // smp->send_ipi = (void *)&sendipi_gic_v3_sr;
+    smp->send_ipi = (void *)&sendipi_gic_v2;
 }
 
 /**

@@ -36,17 +36,14 @@
  * @{
  */
 
-/* Global startup data */
-stm32mp2_startup_data_t startup_data;
-
 /* Callout prototype */
 extern struct callout_rtn reboot_stm32mp2;
 
-// const struct callout_slot callouts[] = {
-//     {
-//         CALLOUT_SLOT(reboot, _stm32mp2)
-//     },
-// };
+const struct callout_slot callouts[] = {
+    {
+        CALLOUT_SLOT(reboot, _stm32mp2)
+    },
+};
 
 /* The USB-Serial is on UART2 */
 struct debug_device debug_devices[] = {
@@ -84,15 +81,13 @@ struct debug_device debug_devices[] = {
 int main(const int argc, char **const argv, const char **const envv)
 {
     int opt = 0;
-
-    /* Initialize global startup structure */
-    memset(&startup_data, 0x00, sizeof(startup_data));
+    uint32_t chip_rev;   /**< Processor revision */
+    uint32_t chip_type;  /**< Processor type */
 
     /* Initialize debug interface. */
     select_debug(debug_devices, sizeof(debug_devices));
-    kprintf("\n---> uart initialized...\n");
 
-    // add_callout_array(callouts, sizeof(callouts));
+    add_callout_array(callouts, sizeof(callouts));
 
     /* Common options that should be avoided are:
        "AD:F:f:I:i:K:M:N:o:P:R:S:Tvr:j:Z" */
@@ -115,15 +110,45 @@ int main(const int argc, char **const argv, const char **const envv)
     // }
 
     /* Get chip revision */
-    // startup_data.chip_rev = imx_get_chip_rev();
+    chip_rev = 0x123;  // imx_get_chip_rev();
     /* Get chip type */
-    // startup_data.chip_type = (imx_get_chip_type() & IMX_MCU_TYPE_MASK);
+    chip_type = 0x456;  // (imx_get_chip_type() & IMX_MCU_TYPE_MASK);
+    (void)chip_rev;
+    (void)chip_type;
 
     /* Collect information on all free RAM in the system */
     stm32mp2_init_raminfo();
 
     /* Remove RAM used by modules in the image */
-    // alloc_ram(shdr->ram_paddr, shdr->ram_size, 1);
+    alloc_ram(shdr->ram_paddr, shdr->ram_size, 1);
+
+    /* Enable Hypervisor if requested (and possible) */
+    hypervisor_init(0);
+
+    init_smp();
+
+    if (shdr->flags1 & STARTUP_HDR_FLAGS1_VIRTUAL) {
+        init_mmu();
+    }
+
+    // init_pcie_ext_msi_controller();
+
+    init_intrinfo();
+
+    init_qtime();
+
+    init_cacheattr();
+
+    init_cpuinfo();
+
+    init_hwinfo();
+
+    /*
+     * Load bootstrap executables in the image file system and Initialize
+     * various syspage pointers. This must be the _last_ initialization done
+     * before transferring control to the next program.
+     */
+    init_system_private();
 
     /*
      * This is handy for debugging a new version of the startup program.
