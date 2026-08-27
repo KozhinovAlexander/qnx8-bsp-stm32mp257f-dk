@@ -1,0 +1,91 @@
+OUTPUT_FORMAT("elf64-littleaarch64", "elf64-littleaarch64", "elf64-littleaarch64")
+OUTPUT_ARCH(aarch64)
+ENTRY(_start)
+
+
+MEMORY
+{
+    m_dtb_rom       : ORIGIN = (0x00920000 - 0x00000000 - 0x000000), LENGTH = 0x00000000
+    m_atf_rom       : ORIGIN = (0x00920000 - 0x000000), LENGTH = 0x000000
+    m_rom           : ORIGIN = (0x00920000 + 0x00000), LENGTH = 0xC000
+    m_stack         : ORIGIN = (0x00920000 + 0x000000 + 0xC000), LENGTH = 0x5000
+    ddrPmuTrain_rom : ORIGIN = (0x00920000 + 0x000000 + 0xC000 + 0x5000), LENGTH = 0x20000
+    cm7_rom         : ORIGIN = (0x00920000 + 0x000000 + 0xC000 + 0x5000 + 0x20000), LENGTH = 0x00000000
+}
+
+SECTIONS
+{
+    .dtb :
+    {
+        . = ALIGN(4);
+        KEEP(*(.DeviceTreeSection))
+        . = ALIGN(4);
+    } > m_dtb_rom
+
+    .atf :
+    {
+        . = ALIGN(4);
+        _atf_fw_start = .;
+        KEEP(*(.ArmTrustedFW))
+        . = ALIGN(4);
+        _atf_fw_end = .;
+    } > m_atf_rom
+
+    . = ALIGN(4);
+    .text :
+    {
+        _ipl_code_start = .;
+        *(.text)
+        *(.note.gnu.build-id)
+        *(.rodata*)
+        _ipl_code_end = .;
+    } > m_rom
+
+    . = ALIGN(4);
+    _etext = .;
+    .data :
+    {
+        *(.data)
+        *(.data*)
+        *(.sdata)
+    } > m_rom
+
+    . = ALIGN(4);
+    _ecopy = .;
+    .bss :
+    {
+        *(.bss)
+        *(.sbss)
+    } > m_rom
+
+    .stack :
+    {
+        . = ALIGN(8);
+        __ipl_stack_bottom = .;
+        . += 0x5000;
+        __ipl_stack_top = .;
+    } > m_stack
+
+    .ddrPmuTrain :
+    {
+        . = ALIGN(4);
+        __ddrPmuTrain_begin = .;
+        KEEP(*(.ddrPmuTrainFw))
+        __ddrPmuTrain_end = .;
+        . = ALIGN(4);
+    } > ddrPmuTrain_rom
+
+    .cm7_0 :
+    {
+        . = ALIGN(4);
+        __cm7_begin = .;
+        KEEP(*(.CortexM7_Fw))
+        __cm7_end = .;
+        . = ALIGN(4);
+    } > cm7_rom
+
+    __dtb_start = ORIGIN(m_dtb_rom);
+    __ipl_code_begin = ORIGIN(m_rom);
+    __ipl_code_size = _ecopy - _ipl_code_start;
+    __cm7_code_size = __cm7_end - __cm7_begin;
+}

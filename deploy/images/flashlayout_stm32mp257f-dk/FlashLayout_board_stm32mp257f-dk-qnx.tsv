@@ -9,4 +9,5 @@ PD	0x07	metadata2	FWU_MDATA	mmc0	0x000C4400	arm-trusted-firmware/metadata.bin
 P	0x08	fip-a	FIP	mmc0	0x00104400	fip/fip-stm32mp257f-dk-opteemin-sdcard.bin
 PED	0x09	fip-b	FIP	mmc0	0x00504400	none
 PED	0x0A	u-boot-env	ENV	mmc0	0x00904400	none
-PED	0x10	qnx	FileSystem	mmc0	0x00984400	none
+P	0x10	bootfs	System	mmc0	0x00984400	none
+P	0x11	userfs	FileSystem	mmc0	0x080984400	none

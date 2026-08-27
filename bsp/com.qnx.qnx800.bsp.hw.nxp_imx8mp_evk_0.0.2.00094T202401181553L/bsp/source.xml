@@ -1,0 +1,24 @@
+<!-- Unless otherwise specified, values/attributes are free-form strings -->
+    <!-- type is currently either BSP or SourceOnly -->
+<sourcePackage type="BSP" id="hw.nxp-imx8mp-evk">
+    <title>NXP i.MX 8M Plus</title>
+    <release>0.0.2</release>
+    <license>QDL and Apache II</license>
+    <requires>package: com.qnx.${baselineId}.target.screen.device_input_screen</requires>
+    <requires>package: com.qnx.${baselineId}.target.screen.board.imx8mp</requires>
+    <requires>package: com.qnx.${baselineId}.target.screen.base</requires>
+    <requires>package: com.qnx.${baselineId}.target.screen.fonts.engine</requires>
+    <requires>package: com.qnx.${baselineId}.target.screen.img_codecs</requires>
+    <requires>package: com.qnx.${baselineId}.target.pci.hw.nxp_imx8m_cpu</requires>
+    <requires>package: com.qnx.${baselineId}.target.fs.flash3 (>= 0.0.2)</requires>
+    <requires>package: com.qnx.${baselineId}.target.drivers.flash (>= 0.0.2)</requires>
+    <startup>startup-imx8mp-evk</startup>
+    <description>This board support package is for the i.MX 8M Plus LPDDR4 EVK board. This BSP contains prebuilt binaries and buildfiles to boot your board with the QNX Muon RTOS. In addition, this BSP provides source code for various drivers that you can build. For documentation to use this BSP, download the user's guide from the QNX website.</description>
+    <vendor>BlackBerry Limited</vendor>
+    <qnxTargetVersion>SDP8.0</qnxTargetVersion>
+    <qnxTargetCPU variant="aarch64le">AARCH64</qnxTargetCPU>
+    <!-- type is currently only import, will be extended in the future. -->
+    <bsp type="import">
+        <import id="nxp-imx8mp-evk">images/imx8mp-evk.build</import>
+    </bsp>
+</sourcePackage>

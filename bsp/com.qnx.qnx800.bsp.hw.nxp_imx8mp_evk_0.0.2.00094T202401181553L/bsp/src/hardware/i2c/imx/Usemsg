@@ -1,0 +1,17 @@
+i.MX/S32/LS1/LS2 I2C Driver
+
+%C [options]
+
+Options:
+-c clock        Input clock (Default: 66500000)
+-i irq          Interrupt number (Default: -1)
+-l              Need _NTO_TCTL_IO_PRIV
+-p physbase     I2C controller physical base address (Default: 0)
+-s slave_addr   I2C slave address (Default: 0)
+-t itype        I2C controller type. 0: i.MX, 1: S32/LS1/LS2 (Default: 0)
+-v              Increase verbose (Default: 2)
+
+Generic options for I2C resource manager libi2c-master:
+--b bus_speed   Default bus speed. (Default: 100000)
+--u unit        Unit number. Number to append to device name
+                prefix (/dev/i2c). (Default: 0)

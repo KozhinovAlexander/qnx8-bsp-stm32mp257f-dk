@@ -1,0 +1,15 @@
+
+
+Notes for NXP FLEXSPI soc-specific(soc) options:
+soc options: all options are separated by colons
+
+'base'                      : flexspi controller base address
+'irq'                       : flexspi controller IRQ number
+'abma_base'                 : flexspi controller ABMA mapping base address
+'octcomb_en'=[0|1]          : enalbe Octal combination mode (default: disable)
+'rxclksrc'                  : Sample Clock source selection for Flash Reading(default: 0). Note: check RXCLKSRC field of MCR0 register for details.
+
+
+Examples of soc options:
+For imx8qm-mek board:
+%C -s verbose=1,soc=base=0x5D120000:irq=124:abma_base=0x08000000

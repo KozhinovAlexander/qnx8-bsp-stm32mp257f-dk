@@ -6,20 +6,13 @@ Board Support Package for **QNX Neutrino RTOS 8.0** targeting the
 Please refer first to [**Getting Started Guide**](./docs/getting_started.md) to provide necessary manual installation steps.
 
 - [QNX 8 BSP for STM32MP257F-DK](#qnx-8-bsp-for-stm32mp257f-dk)
-  - [Configure project](#configure-project)
-  - [Hardware](#hardware)
-  - [Boot Flow](#boot-flow)
-  - [Repository Layout](#repository-layout)
-  - [Prerequisites](#prerequisites)
-  - [Building](#building)
-    - [Individual targets](#individual-targets)
-  - [Flashing \& Booting](#flashing--booting)
-    - [Development — TFTP boot (recommended for bring-up)](#development--tftp-boot-recommended-for-bring-up)
-    - [Production — boot from eMMC](#production--boot-from-emmc)
-  - [Driver Bring-up Priority](#driver-bring-up-priority)
-  - [Key Addresses (STM32MP257)](#key-addresses-stm32mp257)
-  - [References](#references)
-  - [License](#license)
+	- [Configure project](#configure-project)
+	- [Hardware](#hardware)
+		- [COM Port configuration](#com-port-configuration)
+	- [SD Card Provision](#sd-card-provision)
+	- [Building the Project](#building-the-project)
+	- [Booting QNX from U-Boot](#booting-qnx-from-u-boot)
+	- [References](#references)
 
 
 ## Configure project
@@ -31,7 +24,7 @@ After cloning this project refer to [Getting Started](./docs/getting_started.md)
 | Component        | Details                                           |
 |------------------|---------------------------------------------------|
 | **SoC**          | STM32MP257FAK3                                    |
-| **CPU**          | Dual Cortex-A35 @ 1.5 GHz (AArch64) + Cortex-M33 |
+| **CPU**          | Dual Cortex-A35 @ 1.5 GHz (AArch64) + Cortex-M33  |
 | **RAM**          | 4 GB LPDDR4                                       |
 | **Storage**      | 8 GB eMMC 5.1 + microSD                           |
 | **Debug UART**   | UART4 @ `0x40010000`, 115200 8N1 (via ST-LINK/V3) |
@@ -41,154 +34,50 @@ After cloning this project refer to [Getting Started](./docs/getting_started.md)
 
 ---
 
-## Boot Flow
+### COM Port configuration
 
-Please refer to [U-Boot STM32 documentation][_stm32_u_boot_] for more information.
+Connect to the COM port (`ls /dev/ttyACM*`) using your favorite terminal program with these settings:
 
-```
-Power-on
-  └─> STM32MP2 ROM Boot
-        └─> TF-A (BL2 / BL31)  — EL3, DDR init, TrustZone
-              └─> U-Boot (EL1)
-                    └─> FIT image (eMMC / SD / TFTP)
-                          ├─> QNX IFS  (loaded @ 0xC0100000)
-                          └─> DTB      (passed in x0)
-                                └─> startup-stm32mp257f-dk
-                                      └─> procnto-smp  (QNX kernel)
-```
+    Baud rate: 115200
+    Data: 8 bit
+    Parity: none
+    Stop: 1 bit
+    Flow control: none
 
-> **Note:** TF-A handles DDR training and EL3 setup before handing off to
-> U-Boot at EL1. QNX startup therefore runs at EL1 and must **not**
-> re-initialise DDR.
+## SD Card Provision
 
----
+A one-time action shall be done to make your SD-Card bootable and populate it with first- and second-stage bootloaders. Insert a Micro-SD card delivered with STM32MP257F-DK or any compatible one into SD-Card reader of your computer and find it with `lsblk` command.
 
-## Repository Layout
+**NOTE:** Currently only linux host is supported for SD-Card provisioning.
 
-```
-qnx8-bsp-stm32mp257f-dk/
-├── src/
-│   ├── startup/
-│   │   └── startup-stm32mp257f-dk/   # AArch64 QNX startup
-│   │       ├── main.c
-│   │       ├── init_raminfo.c
-│   │       ├── init_intrinfo.c
-│   │       ├── init_smp.c
-│   │       ├── init_timing.c
-│   │       ├── board_smp.c
-│   │       ├── callout_debug_stm32_uart.S
-│   │       └── Makefile
-│   └── hardware/
-│       ├── devc/
-│       │   └── devc-ser-stm32/       # UART serial driver
-│       │       ├── stm32_uart.c
-│       │       ├── stm32_uart.h
-│       │       └── Makefile
-│       ├── i2c/
-│       │   └── i2c-stm32mp2/         # I2C driver stub
-│       │       └── Makefile
-│       └── spi/
-│           └── spi-stm32mp2/         # SPI driver stub
-│               └── Makefile
-├── images/
-│   ├── stm32mp257f-dk.build          # mkifs IFS build script
-│   └── stm32mp257f-dk.its            # U-Boot FIT image source
-├── install/
-│   └── qnx-uboot-env.txt             # U-Boot environment variables
-├── Makefile                          # Top-level build
-└── README.md
+Run make command to provision the card:
+
+```sh
+make sdcard_provision SD_CARD_DEV=/dev/sdX
 ```
 
----
+**ATTENTION:** ENSURE your're flashing correct sd-card found with `lsblk`, otherwise you may destroy your host file-system!
 
-## Prerequisites
+## Building the Project
 
-| Tool / Package         | Notes                                    |
-|------------------------|------------------------------------------|
-| QNX SDP 8.0            | Provides toolchain, `mkifs`, `procnto`   |
-| `mkimage`              | U-Boot tools — build FIT image           |
-| TF-A + U-Boot binaries | Pre-built for STM32MP257F-DK from ST     |
-| STM32MP257F-DK DTB     | From Linux kernel or TF-A device tree    |
-
----
-
-## Building
-
-```bash
-# 1. Source the QNX SDP environment
-source /path/to/qnx800/qnxsdp-env.sh
-
-# 2. Build startup + drivers + IFS image + FIT image
+```sh
 make all
-
-# Outputs:
-#   images/stm32mp257f-dk.ifs   — QNX Image File System
-#   images/fitImage-qnx         — U-Boot FIT image
 ```
 
-### Individual targets
+**NOTE:** Please verify your TFTP configuration - it shall have `/etc/default/tftpd-hpa` config similiar to this one:
 
-```bash
-make startup   # build startup-stm32mp257f-dk only
-make drivers   # build all hardware drivers
-make image     # run mkifs → stm32mp257f-dk.ifs
-make fit       # run mkimage → fitImage-qnx
-make clean
+```sh
+# /etc/default/tftpd-hpa
+
+TFTP_USERNAME="tftp"
+TFTP_DIRECTORY="/srv/tftp"
+TFTP_ADDRESS=":69"
+TFTP_OPTIONS="--secure"
 ```
 
----
+## Booting QNX from U-Boot
 
-## Flashing & Booting
-
-### Development — TFTP boot (recommended for bring-up)
-
-```bash
-# On the host — copy FIT image to TFTP root
-cp images/fitImage-qnx /tftpboot/
-
-# In U-Boot console on the board
-setenv bootcmd 'run qnxboot_tftp'
-run qnxboot_tftp
-```
-
-### Production — boot from eMMC
-
-```bash
-# Write FIT image to eMMC (offset 2048 sectors = 1 MiB)
-sudo dd if=images/fitImage-qnx of=/dev/sdX bs=512 seek=2048
-
-# In U-Boot console
-setenv bootcmd 'run qnxboot'
-saveenv
-reset
-```
-
----
-
-## Driver Bring-up Priority
-
-| Priority | Driver               | Interface              |
-|----------|----------------------|------------------------|
-| 1        | `devc-ser-stm32`     | UART4 debug console    |
-| 2        | `devnp-stm32-gmac`   | Gigabit Ethernet       |
-| 3        | `devb-sdmmc-stm32`   | eMMC / microSD         |
-| 4        | `i2c-stm32mp2`       | PMIC, sensors          |
-| 5        | `spi-stm32mp2`       | SPI NOR flash          |
-
----
-
-## Key Addresses (STM32MP257)
-
-| Peripheral         | Base Address   |
-|--------------------|----------------|
-| UART4              | `0x40010000`   |
-| GIC Distributor    | `0x58000000`   |
-| GIC Redistributor  | `0x580A0000`   |
-| RCC                | `0x44200000`   |
-| DDR Controller     | `0x5A000000`   |
-| DDR PHY            | `0x5A010000`   |
-
----
+Setting up U-Boot and booting QNX8 is described in [Manual U-Boot Setup][_man_uboot_setup_]
 
 ## References
 
@@ -198,12 +87,6 @@ reset
 - [joexue/qemu-virt — minimal public QNX 8 AArch64 BSP](https://github.com/joexue/qemu-virt)
 - [QNX RPi4 Quick-Start Image](https://gitlab.com/qnx/quick-start-images/raspberry-pi-qnx-8.0-quick-start-image)
 
----
 
-## License
-
-This BSP skeleton is provided as a starting point for porting QNX 8 to the
-STM32MP257F-DK. Adapt and extend as required for your project.
-
-
+[_man_uboot_setup_]: ./bsp/manual_uboot_setup.md
 [_stm32_u_boot_]: https://wiki.st.com/stm32mpu/wiki/U-Boot

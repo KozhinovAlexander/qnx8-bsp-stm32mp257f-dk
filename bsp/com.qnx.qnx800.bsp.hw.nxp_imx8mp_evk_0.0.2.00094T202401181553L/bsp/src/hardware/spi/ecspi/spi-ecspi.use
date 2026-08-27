@@ -1,0 +1,26 @@
+%C Driver for ECSPI controllers
+
+Syntax:
+%C [-c config_file] [-v]
+
+    -c config_file      Path to the SPI configuration file
+                        (default: /etc/system/config/spi/spi.conf)
+    -v                  Increase verbosity. This will override the "verbose" value in the config file.
+
+Note: SPI config file template can be found at "lib/io-spi/config_files/spi-template.conf".
+
+Driver-specific options:
+(To be set in the config file by parameter 'bs' under section 'bus'.)
+
+  loopback=num        Set internal loopback for test, default=0 (loopback disabled)
+  waitstate=num       Set number of waitstates between xfers, default=0
+  csdelay=num         Set number of SPI clocks between chip select active edge and first SPI clock edge, default=0
+  waitstate=num       Set number of waitstates between xfers, default=0
+  burst=num           Indicate which mode used for SPI transfer,
+                      if burst=1 (default value), it work in burst mode that support 8, 16 and 32bits word;
+                      if burst=0, it work in word mode and support any word length (from 1 to 32 bits)
+
+Examples:
+
+# Start the driver using a custom config file path
+%C -c /etc/custom/spi.conf

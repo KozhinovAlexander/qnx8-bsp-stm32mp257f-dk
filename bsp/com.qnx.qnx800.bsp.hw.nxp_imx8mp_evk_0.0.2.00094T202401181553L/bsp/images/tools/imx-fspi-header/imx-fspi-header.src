@@ -1,0 +1,141 @@
+tag:                    .word 0x42464346    /* ascii:” FCFB” */
+version:                .word 0x56010000    /* [07:00] bugfix = 0 [15:08] minor = 0 [23:16] major = 1 [31:24] ascii ‘V’ */
+reserved8:              .word 0x00000000    /* Reserved */
+readSampleClkSrc:       .byte 0x00          /* 0 - internal loopback, 3 - Flash provided DQS */
+dataHoldTime:           .byte 0x03          /* Serial Flash CS Hold Time Recommend default value is 0x03 */
+dataSetupTime:          .byte 0x03          /* Serial Flash CS setup time Recommended default value is 0x03 */
+columnAdressWidth:      .byte 0x00          /* 3 - For HyperFlash 0 - Other devices */
+deviceModeCfgEnable:    .byte 0x00          /* Device mode configuration enenable */
+reserved11:             .byte 0x00          /* Reserved */
+reserved12:             .byte 0x00          /* Reserved */
+reserved13:             .byte 0x00          /* Reserved */
+deviceModeSeq:          .word 0x00000000    /* seqNum = 1, seqId = 4 */
+deviceModeArg:          .word 0x00000000    /**/
+configCmdEnable:        .byte 0x00          /**/
+reserved1d:             .byte 0x00          /* Reserved */
+reserved1e:             .byte 0x00          /* Reserved */
+reservedef:             .byte 0x00          /* Reserved */
+configCmdSeqs0:         .word 0x00000000    /**/
+configCmdSeqs1:         .word 0x00000000    /**/
+configCmdSeqs2:         .word 0x00000000    /**/
+configCmdSeqs3:         .word 0x00000000    /**/
+cfgCmdArgs0:            .word 0x00000000    /**/
+cfgCmdArgs1:            .word 0x00000000    /**/
+cfgCmdArgs2:            .word 0x00000000    /**/
+cfgCmdArgs3:            .word 0x00000000    /**/
+controllerMiscOption:   .word 0x00000000    /* Disable DDR mode */
+deviceType:             .byte 0x01          /* Serial NOR */
+sflashPadType:          .byte 0x01          /* 1 - Single pad, 2 - Dual pads, 4 - Quad pads, 8 - Octal pads */
+serialClkFreq:          .byte 0x02          /* 1=20MHz, 2=50MHz, 3=60MHz, 4=80MHz, 5=100MHz, 6=133MHz, 7=166MHz */
+lutCustomSeqEnable:     .byte 0x00          /* 0 - Use pre-defined LUT sequence index and number */
+reserved48:             .word 0x00000000    /* Reserved */
+reserved49:             .word 0x00000000    /* Reserved */
+sflashA1Size:           .word 0x10000000    /* Flash size actual size, in terms of bytes */
+sflashA2Size:           .word 0x00000000    /**/
+sflashB1Size:           .word 0x00000000    /**/
+sflashB2Size:           .word 0x00000000    /**/
+csPadSettingOverride:   .word 0x00000000    /* Set to 0 if it is not supported */
+sclkPadSettingOverride: .word 0x00000000    /* Set to 0 if it is not supported */
+dataPadSettingOverride: .word 0x00000000    /* Set to 0 if it is not supported */
+dqsPadSettingOverride:  .word 0x00000000    /* Set to 0 if it is not supported */
+timeoutInMs:            .word 0x00000000    /**/
+commandInterval:        .word 0x00000000    /**/
+dataValidTime:          .word 0x00000000    /**/
+busyOffset:             .short 0x0000       /**/
+busyBitPolarity:        .short 0x0000       /**/
+lut0:                   .word 0x0818040B    /* 4-bit read command */
+lut1:                   .word 0x24043008    /**/
+lut2:                   .word 0x00000000    /**/
+lut3:                   .word 0x00000000    /**/
+lut4:                   .word 0x00000000    /**/
+lut5:                   .word 0x00000000    /**/
+lut6:                   .word 0x00000000    /**/
+lut7:                   .word 0x00000000    /**/
+lut8:                   .word 0x00000000    /**/
+lut9:                   .word 0x00000000    /**/
+lut10:                  .word 0x00000000    /**/
+lut11:                  .word 0x00000000    /**/
+lut12:                  .word 0x00000000    /**/
+lut13:                  .word 0x00000000    /**/
+lut14:                  .word 0x00000000    /**/
+lut15:                  .word 0x00000000    /**/
+lut16:                  .word 0x00000000    /**/
+lut17:                  .word 0x00000000    /**/
+lut18:                  .word 0x00000000    /**/
+lut19:                  .word 0x00000000    /**/
+lut20:                  .word 0x00000000    /**/
+lut21:                  .word 0x00000000    /**/
+lut22:                  .word 0x00000000    /**/
+lut23:                  .word 0x00000000    /**/
+lut24:                  .word 0x00000000    /**/
+lut25:                  .word 0x00000000    /**/
+lut26:                  .word 0x00000000    /**/
+lut27:                  .word 0x00000000    /**/
+lut28:                  .word 0x00000000    /**/
+lut29:                  .word 0x00000000    /**/
+lut30:                  .word 0x00000000    /**/
+lut31:                  .word 0x00000000    /**/
+lut32:                  .word 0x00000000    /**/
+lut33:                  .word 0x00000000    /**/
+lut34:                  .word 0x00000000    /**/
+lut35:                  .word 0x00000000    /**/
+lut36:                  .word 0x00000000    /**/
+lut37:                  .word 0x00000000    /**/
+lut38:                  .word 0x00000000    /**/
+lut39:                  .word 0x00000000    /**/
+lut40:                  .word 0x00000000    /**/
+lut41:                  .word 0x00000000    /**/
+lut42:                  .word 0x00000000    /**/
+lut43:                  .word 0x00000000    /**/
+lut44:                  .word 0x00000000    /**/
+lut45:                  .word 0x00000000    /**/
+lut46:                  .word 0x00000000    /**/
+lut47:                  .word 0x00000000    /**/
+lut48:                  .word 0x00000000    /**/
+lut49:                  .word 0x00000000    /**/
+lut50:                  .word 0x00000000    /**/
+lut51:                  .word 0x00000000    /**/
+lut52:                  .word 0x00000000    /**/
+lut53:                  .word 0x00000000    /**/
+lut54:                  .word 0x00000000    /**/
+lut55:                  .word 0x00000000    /**/
+lut56:                  .word 0x00000000    /**/
+lut57:                  .word 0x00000000    /**/
+lut58:                  .word 0x00000000    /**/
+lut59:                  .word 0x00000000    /**/
+lut60:                  .word 0x00000000    /**/
+lut61:                  .word 0x00000000    /**/
+lut62:                  .word 0x00000000    /**/
+lut63:                  .word 0x00000000    /**/
+lutCustomSeq0:          .word 0x00000000    /* Read 0 - 0 */
+lutCustomSeq1:          .word 0x00000000    /* ReadStatus 1 - 1 */
+lutCustomSeq2:          .word 0x00000000    /* WriteEnable 2 -2 */
+lutCustomSeq3:          .word 0x00000000    /**/
+lutCustomSeq4:          .word 0x00000000    /**/
+lutCustomSeq5:          .word 0x00000000    /**/
+lutCustomSeq6:          .word 0x00000000    /* Dummy */
+lutCustomSeq7:          .word 0x00000000    /**/
+lutCustomSeq8:          .word 0x00000000    /**/
+lutCustomSeq9:          .word 0x00000000    /**/
+lutCustomSeq10:         .word 0x00000000    /**/
+lutCustomSeq11:         .word 0x00000000    /**/
+reserved1b0:            .word 0x00000000    /* Reserved */
+reserved1b1:            .word 0x00000000    /* Reserved */
+reserved1b2:            .word 0x00000000    /* Reserved */
+reserved1b3:            .word 0x00000000    /* Reserved */
+pageSize:               .word 0x00000100    /* Page size of Serial NOR Flash - not used in ROM */
+sectorSize:             .word 0x00010000    /* ??? 20000 Sector size of Serial NOR Flash. - not used in ROM */
+reserved1c8:            .word 0x00000000    /* Reserved */
+reserved1cc:            .word 0x00000000    /* Reserved */
+reserved1d0:            .word 0x00000000    /* Reserved */
+reserved1d4:            .word 0x00000000    /* Reserved */
+reserved1d8:            .word 0x00000000    /* Reserved */
+reserved1dc:            .word 0x00000000    /* Reserved */
+reserved1e0:            .word 0x00000000    /* Reserved */
+reserved1e4:            .word 0x00000000    /* Reserved */
+reserved1e8:            .word 0x00000000    /* Reserved */
+reserved1ec:            .word 0x00000000    /* Reserved */
+reserved1f0:            .word 0x00000000    /* Reserved */
+reserved1f4:            .word 0x00000000    /* Reserved */
+reserved1f8:            .word 0x00000000    /* Reserved */
+reserved1fc:            .word 0x00000000    /* Reserved */

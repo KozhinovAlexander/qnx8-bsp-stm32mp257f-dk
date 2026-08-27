@@ -1,0 +1,42 @@
+%C - CAN driver for FLexCAN Controller
+
+%C [options] ["can#"[,sysirq[,irqsys[,irqsys]]]]
+
+can#        is can0|1|2|3
+sysirq      is CAN system interrupt number, up to 3 IRQ numbers
+
+Options:
+ -a                                     Disable autobus (default ON)
+ -b string                              Predefined bitrate (50K, 125K, 250K, 500K, 1M, default 50K)
+ -B presdiv,propseg,pseg1,pseg2,rjw     Manually define bitrate
+ -c number                              Set and enable TDC offset (available for CAN-FD drivers)
+ -d string                              Predefined data bitrate for CAN-FD (50K, 125K, 250K, 500K, 1M, 5M, default 50K)
+ -D presdiv,propseg,pseg1,pseg2,rjw     Manually define data bitrate for CAN-FD
+ -f                                     CAN-FD mode
+                                        Note: "-f" option shouldn't be used on old FLEXCAN controller(eg. the one found on imx8qm/qxp SOC)
+ -h                                     Single message buffer[14MB], default dual buffer[28MB]
+                                        Note: "-h" is mandatory if the FLEXCAN controller(eg. the one found on imx8qm/qxp SOC) doesn't support dual buffer
+ -i midrx[,midtx]                       Starting receive and transmit message ID (default 0x100C0000)
+ -I                                     Enable IO privity
+ -l                                     Listen only Mode
+ -m number                              Initial local timestamp
+ -M                                     Disable MECR
+                                        Note: "-M" is mandatory for certain FLEXCAN controllers(eg. the one found on the i.MX8M Plus SOC)
+ -n number                              Number of each device mailbox message buffer (default 128 for CAN, 28 for CAN-FD)
+ -o                                     Enable CAN FD ISO
+ -p port                                Base address of Flexcan
+ -q number                              Cleint wait queue length for each mailbox
+ -r number[,number[,number]]            IRQ number, up to 3 IRQ numbers
+ -R                                     Enable Raw mode, send and receive both standard and extended messages (does not require -x)
+ -s                                     Enable triple bitrate sample (default single sample)
+ -S                                     Message data endian swap
+ -t                                     Enable self-test loopback mode (default disabled)
+ -u number                              CAN unit number (default 1)
+ -v                                     Increase driver verbosity
+ -w                                     Lowest number buffer is transmitted first
+ -x                                     Enable extended 29 bit CAN message ID (default standard 11 bit MID)
+ -z                                     Enable Timer Sync feature
+
+Examples:
+S32g in loopback mode: devcan-flexcan -t -I -S can0,0x45,0x47,0x48
+Imx8 in loopback mode: devcan-flexcan -t -h can0

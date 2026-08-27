@@ -1,0 +1,46 @@
+{
+  "descriptorVersion": "1.1",
+  "type": "bsp",
+  "payloadFormat": "qnx.sw.fileset",
+  "authorId": "com.qnx",
+  "authorName": "BlackBerry Limited",
+  "id": "com.qnx.qnx800.bsp.hw.raspberrypi_bcm2712_rpi5",
+  "name": "QNX® SDP 8.0 BSP for Raspberry Pi 5",
+  "description": "This board support package (BSP) is for the Raspberry Pi 5 board. This BSP contains prebuilt binaries and buildfiles to boot your board with the QNX RTOS. In addition, this BSP provides source code for various drivers that you can build. For documentation to use this BSP, download the user's guide.",
+  "version": "0.3.0.00381T202512101351L",
+  "locale": "en",
+  "properties": {
+    "com.qnx.category": "BSP & Drivers",
+    "f.subsystem": "BSP & Drivers",
+    "f.swtype": "I",
+    "com.qnx.status": "lookup",
+    "com.qnx.marketingVersion": "8.0 Build 381 - December 10, 2025",
+    "com.qnx.buildTag": "jenkins-BSP_raspberrypi-bcm2712-rpi5_be-800-381",
+    "com.qnx.buildNumber": "381",
+    "com.qnx.buildTimestamp": "202512101351",
+    "product": "QNX Software Development Platform",
+    "f.support": "Full"
+  },
+  "baselines": [
+    "qnx800"
+  ],
+  "filter": "(qnx.target.aarch64le=true)",
+  "provides": [
+    "buildversion: com.qnx.qnx800.bsp.hw.raspberrypi_bcm2712_rpi5 (8.0.381)",
+    "primary: com.qnx.qnx800.bsp.hw.raspberrypi_bcm2712_rpi5 (0.3.0.0381202512101351)"
+  ],
+  "requires": [
+    "package: com.qnx.qnx800.target.microkernel.core (>= 2.0.2)",
+    "package: com.qnx.qnx800.target.usb.hcd.xhci.dwc3",
+    "package: com.qnx.qnx800.target.pci.hw.bcm2712",
+    "package: com.qnx.qnx800.target.net.devs.cgem (>= 0.0.3)",
+    "package: com.qnx.qnx800.target.bsp.spi (>= 0.1.2)",
+    "package: com.qnx.qnx800.target.net.openSSH (>= 0.1.0)",
+    "package: com.qnx.qnx800.target.driver.cypress_dhd_sdio_rpi5_2_11 (>= 0.0.1.03043)",
+    "package: com.qnx.qnx800.target.driver.cypress_dhd_sdio (>= 0.0.4)",
+    "package: com.qnx.qnx800.target.net.wpa_supplicant_2.11.iosock (>= 0.0.5)",
+    "package: com.qnx.qnx800.target.driver.dhd_utils (>= 0.0.6.03043)",
+    "package: com.qnx.qnx800.target.drivers.libfdt (>= 0.1.0)",
+    "eula: qdl (0.4)"
+  ]
+}

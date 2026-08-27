@@ -1,0 +1,1 @@
+ASFLAGS += -D__ASM__

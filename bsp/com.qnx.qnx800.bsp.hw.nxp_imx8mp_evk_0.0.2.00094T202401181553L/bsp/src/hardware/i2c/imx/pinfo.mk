@@ -1,0 +1,3 @@
+define PINFO
+PINFO DESCRIPTION=i.MX/S32/LS1/LS2 I2C Driver
+endef

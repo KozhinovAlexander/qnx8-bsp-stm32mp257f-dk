@@ -1,0 +1,5 @@
+SDMA - DMA Controller driver for the imx platform
+
+Please note for i.MX8MQ SDMA2 library must have sdma_init("ratio=0") option.
+
+Loaded and utilised by various drivers.
