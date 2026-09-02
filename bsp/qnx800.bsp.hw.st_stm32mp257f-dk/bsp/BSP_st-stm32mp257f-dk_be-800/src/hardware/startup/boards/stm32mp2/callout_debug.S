@@ -25,7 +25,7 @@
 
 #include <aarch64/callout.ah>
 #include "board.h"
-#include <soc/st/stm32mp2/include/stm32_uart.h>
+#include <soc/st/stm32mp2/include/stm32mp2_uart.h>
 
 /*
  * Patch interrupt callouts to access rw data.

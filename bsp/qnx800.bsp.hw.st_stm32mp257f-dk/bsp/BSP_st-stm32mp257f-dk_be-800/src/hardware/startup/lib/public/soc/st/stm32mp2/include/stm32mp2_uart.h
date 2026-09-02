@@ -7,10 +7,7 @@
 #ifndef STM32_UART_H
 #define STM32_UART_H
 
-#include <soc/st/stm32mp2/include/stm32_uart_regs.h>
-
-#define STM32_USART2_BASE_ADDR	0x400e0000  /* RM0457 Rev 5, page 248/5881 */
-#define STM32_UART_SIZE			0x400  /* RM0457 Rev 5, page 248/5881 */
+#include <soc/st/stm32mp2/include/stm32mp2_uart_regs.h>
 
 /* UART word length */
 #define STM32_UART_WORDLENGTH_7B		STM32_USART_CR1_M1

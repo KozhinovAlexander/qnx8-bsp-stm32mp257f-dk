@@ -50,7 +50,7 @@ void stm32mp2_init_raminfo(void)
      * 256MB is used by TF-A.
      * The remaining 3840MB is available for QNX.
      */
-    add_ram(STM32MP2_DRAM0_BASE + STM32MP2_DRAM0_TFA_SIZE, STM32MP2_DRAM0_SIZE - STM32MP2_DRAM0_TFA_SIZE);
+    add_ram(STM32MP2_DRAM0_OS_BASE, STM32MP2_DRAM0_OS_SIZE);
     /* Add 4 KB /memory/dma region. This region is not used by QNX and is dedicated to DMA. */
     // as_add(STM32MP2_DRAM0_BASE, STM32MP2_DRAM0_BASE + KILO(4) - 1, AS_ATTR_NONE, "dma", as_default());
 }

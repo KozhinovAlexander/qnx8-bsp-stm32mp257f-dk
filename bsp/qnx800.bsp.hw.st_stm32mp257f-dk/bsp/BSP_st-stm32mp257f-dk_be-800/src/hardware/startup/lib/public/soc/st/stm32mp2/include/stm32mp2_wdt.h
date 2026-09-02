@@ -1,8 +1,6 @@
 /*
  * $QNXLicenseC:
- * Copyright 2016, QNX Software Systems.
- * Copyright 2016, Freescale Semiconductor, Inc.
- * Copyright 2017 NXP
+ * Copyright 2026 Alexander Kozhinov <ak.alexander.kozhinov@gmail.com>
  *
  * Licensed under the Apache License, Version 2.0 (the "License"). You
  * may not reproduce, modify or distribute this software except in
@@ -21,23 +19,18 @@
  * $
  */
 
-#ifndef STM32_WDOG_H_
-#define STM32_WDOG_H_
+#ifndef STM32_WDT_H_
+#define STM32_WDT_H_
 
-#define STM32MP2_IWDG_BASE	0x44010000
+#include <stdint.h>
 
-/* IWDG registers offsets */
-#define IWDG_KR_OFFSET		0x00U
-#define IWDG_PR_OFFSET		0x04U
-#define IWDG_RLR_OFFSET		0x08U
+/**
+ * @file stm32mp2_wdt.h
+ * @brief STM32MP2 watchdog driver interface doing SMC calls to TF-A for watchdog
+ *  maintanance.
+ */
 
-/* Registers values */
-#define IWDG_KR_EN_WRITE_KEY	0x5555U
-#define IWDG_KR_RELOAD_KEY	0xAAAAU
-#define IWDG_KR_ENABLE_KEY	0xCCCCU
+int stm32mp2_wdt_reset();
+int stm32mp2_wdt_stop();
 
-#define IWDG_PRESCALER_MIN	2U
-#define IWDG_PRESCALER_MAX	10U
-#define IWDG_RLR_BITS		12U
-
-#endif /* STM32_WDOG_H_ */
+#endif /* STM32_WDT_H_ */

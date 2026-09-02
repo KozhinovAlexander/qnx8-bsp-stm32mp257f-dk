@@ -36,12 +36,14 @@
  * @{
  */
 
+#define STM32_WDT_ENABLE  (1 << 1)  /* watchdog enable */
+
 /* Callout prototype */
 extern struct callout_rtn reboot_stm32mp2;
 
 const struct callout_slot callouts[] = {
     {
-        CALLOUT_SLOT(reboot, _stm32mp2)
+        CALLOUT_SLOT(reboot, _psci_smc)
     },
 };
 
@@ -80,21 +82,24 @@ struct debug_device debug_devices[] = {
  */
 int main(const int argc, char **const argv, const char **const envv)
 {
-    int opt = 0;
-    uint32_t chip_rev;   /**< Processor revision */
-    uint32_t chip_type;  /**< Processor type */
+    int status, opt, options = 0;
+    hyp_flags_t hyp_flags;  /* hypervisor flags */
+
+    /* Setup hypervisor flags */
+    hyp_flags = hypervisor_get_required_flags();
+    hyp_flags |= HYP_FLAG_ENABLED;
+    hypervisor_set_options(hyp_flags);
 
     /* Initialize debug interface. */
     select_debug(debug_devices, sizeof(debug_devices));
 
     add_callout_array(callouts, sizeof(callouts));
 
-    /* Common options that should be avoided are:
-       "AD:F:f:I:i:K:M:N:o:P:R:S:Tvr:j:Z" */
+    kprintf("\n");
     while ((opt = getopt(argc, argv, COMMON_OPTIONS_STRING "W")) != -1) {
         switch (opt) {
             case 'W':
-                // options |= IMX_WDOG_ENABLE;
+                options |= STM32_WDT_ENABLE;
                 break;
             default:
                 handle_common_option(opt);
@@ -102,19 +107,15 @@ int main(const int argc, char **const argv, const char **const envv)
         }
     }
 
-    // if (options & WDT_ENABLE) {
-    //     /*
-    //      * Enable WDT
-    //     */
-    //     // bcm2712_wdt_enable(wdt_timeout);
-    // }
-
-    /* Get chip revision */
-    chip_rev = 0x123;  // imx_get_chip_rev();
-    /* Get chip type */
-    chip_type = 0x456;  // (imx_get_chip_type() & IMX_MCU_TYPE_MASK);
-    (void)chip_rev;
-    (void)chip_type;
+    /* TF-A of stm32mp2 already providing watchdog and
+     * it's interface to OS over SMCCC as arm,smc-wdt dts entity
+     */
+    status = stm32mp2_wdt_reset();
+    kprintf("Reset watchdog. Status: %d\n", status);
+    if ((options & STM32_WDT_ENABLE) != STM32_WDT_ENABLE) {
+        status = stm32mp2_wdt_stop();
+        kprintf("Disable watchdog. Status: %d\n", status);
+    }
 
     /* Collect information on all free RAM in the system */
     stm32mp2_init_raminfo();
@@ -129,19 +130,43 @@ int main(const int argc, char **const argv, const char **const envv)
 
     if (shdr->flags1 & STARTUP_HDR_FLAGS1_VIRTUAL) {
         init_mmu();
+         /* Enable the cache and MMU */
+        stm32mp2_board_mmu_enable(STM32MP2_DRAM0_OS_BASE,
+                                  STM32MP2_DRAM0_OS_SIZE);
+        // board_alignment_check_disable();
     }
 
-    // init_pcie_ext_msi_controller();
+    // stm32mp2_init_pcie_ext_msi_controller();
 
+     /* Initialize the Interrupts related Information */
     init_intrinfo();
 
+    /* Initialize the timer related information */
     init_qtime();
 
+    /* Initialize cache controller */
     init_cacheattr();
 
+    /* Initialize the CPU related information */
     init_cpuinfo();
 
+    /* Initialize the Hwinfo section of the Syspage */
     init_hwinfo();
+    stm32mp2_init_hwinfo();
+
+    // init_gpio_aon_bcm();
+
+    /* TODO: Implement following functions (see: startup/lib/public/startup.h)*/
+    // void init_raminfo(void);
+    // void init_intrinfo(void);
+    // void init_qtime(void);
+    // void init_cacheattr(void);
+    // void init_cpuinfo(void);
+    // void init_hwinfo(void);
+    // void init_asinfo(unsigned mem);
+    // void init_nanospin(void);
+    // void init_mitigation_mem(void);
+
 
     /*
      * Load bootstrap executables in the image file system and Initialize

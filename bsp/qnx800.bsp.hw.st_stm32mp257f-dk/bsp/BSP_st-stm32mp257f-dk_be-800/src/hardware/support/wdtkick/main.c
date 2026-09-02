@@ -35,6 +35,11 @@
 #include <drvr/hwinfo.h>
 #include <stdbool.h>
 
+#include <startup.h>
+#include <libfdt.h>
+
+#define COMPAT_STRING   "arm,smc-wdt"
+
 #define MAX_NUM_REG        5
 #define DEFAULT_REG_LEN    0x1000
 
@@ -706,6 +711,7 @@ int main(const int argc, char *argv[])
 
     slogf(_SLOG_SETCODE(_SLOGC_CHAR, 0), _SLOG_INFO,"wdtkick: enable mask: 0x%x", wdi.enable_mask);
 
+    /*
     // Configure the enable register
     if (wdi.enable_mask && ((read_wdt(wdi.base + wdi.enable_reg_offset) & wdi.enable_mask) != wdi.enable_mask)) {
         slogf(_SLOG_SETCODE(_SLOGC_CHAR, 0), _SLOG_INFO,"wdtkick: enabling the watchdog timer");
@@ -720,6 +726,13 @@ int main(const int argc, char *argv[])
             if (wdi.operation == WRITE) {
                 write_wdt(wdi.base + wdi.write_reg[wdi.idx][REG_OFFSET], wdi.write_reg[wdi.idx][REG_VAL]);
             }
+        }
+        delay((unsigned int)wdi.kick_time);
+    }
+    */
+
+    while (1) {
+        for (wdi.idx = 0; wdi.idx < wdi.num_writes; wdi.idx++) {
         }
         delay((unsigned int)wdi.kick_time);
     }
