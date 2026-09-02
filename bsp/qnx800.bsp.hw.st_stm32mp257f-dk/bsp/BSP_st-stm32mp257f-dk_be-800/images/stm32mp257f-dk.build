@@ -8,7 +8,8 @@
 [+keeplinked]
 [image=0x8a000000]
 [virtual=aarch64le,raw -compress] boot = {
-    startup-stm32mp257f-dk -v -u reg -a -W 5000
+    ## Use -W flag to enable/disable watchdog
+    startup-stm32mp257f-dk -v -u reg -a
     PATH=/proc/boot:/sbin:/bin:/usr/bin:/usr/sbin:/usr/libexec LD_LIBRARY_PATH=/proc/boot:/lib:/usr/lib:/lib/dll:/lib/dll/pci procnto-smp-instr -v
 }
 
@@ -37,10 +38,7 @@
     ## If startup is given -W parameter then the wdtkick utility MUST be uncommented below
     ############################################################################################
     display_msg "Starting WatchDog ..."
-    # wdtkick -W0x24:0x5A028E4C -W0x1c:0x5A000020
-
-
-
+    wdtkick -a 0x44020000 -l 0x400 -t 1000 -W0x00:0x00005555
 
     ############################################################################################
     ## PCIe driver
@@ -86,7 +84,7 @@
     ############################################################################################
     ## Storage service
     ############################################################################################
-    /proc/boot/.storage-server.sh
+    # /proc/boot/.storage-server.sh
 
 
     ############################################################################################
@@ -109,7 +107,7 @@
     ############################################################################################
     ## Start the main shell
     ############################################################################################
-    reopen /dev/ser10
+    # reopen /dev/ser10
     display_msg "Starting shell ..."
     [+session] ksh &
 }
@@ -127,7 +125,7 @@
 ################################################################################################
 ## WDT driver
 ################################################################################################
-# /bin/wdtkick=wdtkick
+/bin/wdtkick=wdtkick
 
 
 ################################################################################################
