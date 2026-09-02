@@ -21,7 +21,7 @@
 #include <startup.h>
 #include "board.h"
 #include "stm32mp2_startup.h"
-#include <soc/st/stm32mp2/include/stm32_smc_call.h>
+#include <soc/st/stm32mp2/include/stm32mp2_smc_call.h>
 
 
 /**

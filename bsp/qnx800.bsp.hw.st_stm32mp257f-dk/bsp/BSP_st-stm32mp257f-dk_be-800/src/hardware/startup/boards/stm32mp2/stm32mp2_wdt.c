@@ -1,5 +1,4 @@
 /*
- * $QNXLicenseC:
  * Copyright 2026 Alexander Kozhinov <ak.alexander.kozhinov@gmail.com>
  *
  * Licensed under the Apache License, Version 2.0 (the "License"). You
@@ -18,36 +17,58 @@
  * http://licensing.qnx.com/license-guide/ for other information.
  */
 
+/*
+ * Independent watchdog operations for STM32MP2
+ */
 
-#ifndef STM32MP2_STARTUP_H_
-#define STM32MP2_STARTUP_H_
+#include <startup.h>
+#include <stdint.h>
 
+#if defined(__aarch64__)
+#include <aarch64/psci.h>
+#else
+#include <arm/psci.h>
+#endif
+
+#include "board.h"
 #include <soc/st/stm32mp2/include/stm32mp2_wdt.h>
 
 /**
  * STM32MP257F-DK startup source file.
  *
- * @file       stm32mp2_startup.h
+ * @file       stm32mp2_wdt.c
  * @addtogroup startup
  * @{
  */
 
-extern void stm32mp2_init_uart(unsigned channel, const char *init, const char *defaults);
-extern void stm32mp2_uart_put_char(int);
+/**
+* arm_wdt: watchdog {
+*   compatible = "arm,smc-wdt";
+*   arm,smc-id = <0xbc000000>;
+*   status = "disabled";
+* };
+*/
+#define PSCI_ARM_WDT_SMC_ID   0xbc000000
 
-extern void stm32mp2_init_pcie_ext_msi_controller(void);
+enum smcwd_call {
+  SMCWD_INIT          = 0,
+  SMCWD_SET_TIMEOUT   = 1,
+  SMCWD_ENABLE        = 2,
+  SMCWD_PET           = 3,
+  SMCWD_GET_TIMELEFT  = 4,
+};
 
-extern struct callout_rtn stm32mp2_uart_display_char;
-extern struct callout_rtn stm32mp2_uart_poll_key;
-extern struct callout_rtn stm32mp2_uart_break_detect;
+int stm32mp2_wdt_reset()
+{
+  return (int)psci_call(PSCI_ARM_WDT_SMC_ID, SMCWD_PET, 0, 0);
+}
 
-void stm32mp2_init_raminfo(void);
-void stm32mp2_init_hwinfo(void);
-void stm32mp2_board_mmu_enable(unsigned base, unsigned size);
-
-#endif /* STM32MP2_STARTUP_H_ */
+int stm32mp2_wdt_stop()
+{
+  return (int)psci_call(PSCI_ARM_WDT_SMC_ID, SMCWD_ENABLE, 0, 0);
+}
 
 #if defined(__QNXNTO__) && defined(__USESRCVERSION)
 #include <sys/srcversion.h>
-__SRCVERSION("$URL: http://svn.ott.qnx.com/product/hardware/branches/release/hardware/startup/boards/stm32mp2/stm32mp2_startup.h $ $Rev: 979659 $")
+__SRCVERSION("$URL: http://svn.ott.qnx.com/product/hardware/branches/release/hardware/startup/boards/stm32mp2/stm32mp2_wdt.c $ $Rev: 984580 $")
 #endif

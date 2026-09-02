@@ -24,13 +24,13 @@
 #include <startup.h>
 
 #include "board.h"
-#include <soc/st/stm32mp2/include/stm32_uart.h>
-#include <soc/st/stm32mp2/include/stm32mp25_rcc.h>
+#include <soc/st/stm32mp2/include/stm32mp2_uart.h>
+#include <soc/st/stm32mp2/include/stm32mp2_rcc.h>
 
 /**
  * STM32MP257F-DK startup source file.
  *
- * @file       stm32mp2_init_uart.c
+ * @file       stm32mp2_uart.c
  * @addtogroup startup
  * @{
  */

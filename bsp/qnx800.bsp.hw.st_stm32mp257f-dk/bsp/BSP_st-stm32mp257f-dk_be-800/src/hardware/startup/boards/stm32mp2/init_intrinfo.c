@@ -22,9 +22,7 @@
  */
 
 #include <startup.h>
-
-#define GICD_PADDR		(0x4AC10000)
-#define GICC_PADDR		(0x4AC20000)
+#include "board.h"
 
 /* Pi 5 PCIe extension port supports 8 IRQs mapped to GICv2 interrupts 287~295 */
 #define PCIE_EXT_IRQ_0      (287)

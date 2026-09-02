@@ -53,7 +53,7 @@ static aarch64_tlb_t board_tlb[] = {
     },
 };
 
-void imx_board_mmu_enable(unsigned base, unsigned size)
+void stm32mp2_board_mmu_enable(unsigned base, unsigned size)
 {
     board_tlb[0].start = base;
     board_tlb[0].len = size;
