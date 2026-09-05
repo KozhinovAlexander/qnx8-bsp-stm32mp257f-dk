@@ -1,3 +1,3 @@
 LIST=hardware
-LATE_DIRS=can devu
+LATE_DIRS=wdt devu
 include recurse.mk

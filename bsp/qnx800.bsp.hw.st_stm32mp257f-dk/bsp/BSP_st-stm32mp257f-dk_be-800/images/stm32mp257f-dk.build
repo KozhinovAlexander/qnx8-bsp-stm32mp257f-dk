@@ -9,7 +9,7 @@
 [image=0x8a000000]
 [virtual=aarch64le,raw -compress] boot = {
     ## Use -W flag to enable/disable watchdog
-    startup-stm32mp257f-dk -v -u reg -a
+    startup-stm32mp257f-dk -v -u reg -a -W
     PATH=/proc/boot:/sbin:/bin:/usr/bin:/usr/sbin:/usr/libexec LD_LIBRARY_PATH=/proc/boot:/lib:/usr/lib:/lib/dll:/lib/dll/pci procnto-smp-instr -v
 }
 
@@ -32,13 +32,11 @@
     mqueue
     random
 
-
-    ############################################################################################
-    ## WatchDog utility
-    ## If startup is given -W parameter then the wdtkick utility MUST be uncommented below
-    ############################################################################################
-    display_msg "Starting WatchDog ..."
-    wdtkick -a 0x44020000 -l 0x400 -t 1000 -W0x00:0x00005555
+    #######################################################################
+    ## Watchdog (WDT) drivers
+    #######################################################################
+    display_msg Starting watchdog driver (/dev/watchdog)...
+    devwdt-arm_smc_wdt -v &
 
     ############################################################################################
     ## PCIe driver
@@ -49,9 +47,11 @@
     #######################################################################
     ## Debug console serial driver
     #######################################################################
-    display_msg "Starting serial driver (/dev/ser10)"
-    # devc-serpl011-rpi5 -b115200 -c44236800 -e -F -u10 -D 0x107d001000^2,153
-
+    ## USART2 - Uncomment following three lines to initialize USART2
+    display_msg Starting Serial driver (/dev/ser2)...
+    # devc-ser-stm32mp2 -F -S -u 2 -c 64000000 0x400e0000,59
+    # waitfor /dev/ser2
+    # on -t /dev/ser2 /bin/sh
 
     #######################################################################
     ## SPI driver
@@ -62,8 +62,6 @@
 
     # spi-dwc -c /etc/system/config/spi/spi.conf
 
-
-
     #######################################################################
     ## SD memory card / eMMC driver
     ## Note: "bmstr_base" option is required for busmaster memory
@@ -72,8 +70,6 @@
     display_msg "Starting SDMMC driver (/dev/sd0)"
     # sh -c "devb-sdmmc-stm32mp257f sdio addr=0x1000fff000,irq=305 disk name=sd > /dev/null 2>&1"
     # waitfor /dev/sd0
-
-
 
     #######################################################################
     ## USB OTG Host Controller driver
@@ -123,22 +119,19 @@
 
 
 ################################################################################################
-## WDT driver
+## Watchdog (WDT) drivers
 ################################################################################################
-/bin/wdtkick=wdtkick
-
+/sbin/devwdt-arm_smc_wdt=devwdt-arm_smc_wdt
 
 ################################################################################################
 ## Serial drivers
 ################################################################################################
-# /sbin/devc-serpl011-rpi5=devc-serpl011-rpi5
-
+# /sbin/devc-ser-stm32mp2=devc-ser-stm32mp2
 
 ################################################################################################
 ## NOR flash driver files
 ################################################################################################
 # /sbin/devf-ram=devf-ram
-
 # /usr/bin/flashctl=flashctl
 
 
@@ -763,30 +756,6 @@ usb_start.sh = {
 
   # io-usb-otg -v -d dwc3-xhci ioport=0x1f00200000,irq=0xbf,iosize=0x100000,bmstr=0x1000000000,ioport=0x1f00300000,irq=0xc4,iosize=0x100000,bmstr=0x1000000000
   # waitfor /dev/usb/io-usb-otg 10
-}
-
-uart4_console.sh = {
-  #!/bin/sh
-  echo "Start uart4 (gpio12-pin32, gpio13-pin33) console"
-
-  # gpio-rp1 set 12 a2 pn
-  # gpio-rp1 set 13 a2 pu
-
-  # devc-serpl011-rpi5 -b115200 -v -c50000000 -e -F -u4 0x1f00040000,0xcd &
-  # waitfor /dev/ser4
-  # on -t /dev/ser4 /bin/sh
-}
-
-uart2_console.sh = {
-  #!/bin/sh
-  echo "Start uart2 (gpioi4-pin7, gpio5-pin29) console"
-
-  # gpio-rp1 set 4 a2 pn
-  # gpio-rp1 set 5 a2 pu
-
-  # devc-serpl011-rpi5 -b115200 -v -c50000000 -e -F -u2 0x1f00038000,0xcb &
-  # waitfor /dev/ser2
-  # on -t /dev/ser2 /bin/sh
 }
 
 ################################################################################################

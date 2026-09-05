@@ -1,6 +1,5 @@
 install
 procnto-smp-instr.sym
-startup-bcm2712-rpi5.sym
 *.pinfo
 *.o
 *.a
@@ -12,13 +11,11 @@ wdtkick
 msix-rp1
 gpio-rp1
 fan-rpi5
-startup-bcm2712-rpi5
 mbox-bcm
 gpio-bcm
 gpio-aon-bcm
 devb-sdmmc-bcm2712
 spi-dwc
 i2c-dwc-rpi5
-devc-serpl011-rpi5
-ifs-rpi5.bin
+devc-ser-stm32mp2
 prebuilt

@@ -35,12 +35,28 @@
  * @{
  */
 
-static char serial[128];
+static char UID[STM32MP2_UID_SIZE_BYTES];
 
-const char* stm32mp2_get_board_serial()
+void stm32mp2_get_UID(char* uid)
 {
-  ksprintf(serial, "%L", 0x123456789ABCDEF); // TODO: implement reading the serial number from the board
-  return serial;
+  if (uid == NULL) return;
+  kprintf("0x%lx\n", (uint64_t)0x123456789ABCDEF);
+}
+
+const char* stm32mp2_get_PKG(void)
+{
+  const volatile uint64_t *pkg_addr = (uint64_t*)(STM32MP2_BSEC_BASE + STM32MP2_BSEC_FVR122);
+  kprintf("---> pkg: 0x%x\n", (uint32_t)(*pkg_addr));
+  return "TODO: implement reading the package type from the board";
+}
+
+const char* stm32mp2_get_PRN(void)
+{
+  volatile uint32_t* prn_addr = (volatile uint32_t*)(0x44000024UL);
+  uint32_t prn = *prn_addr;
+
+  kprintf("---> prn: 0x%x\n", prn);
+  return "TODO: implement reading the device part number from the board";
 }
 
  /**
@@ -52,14 +68,14 @@ void stm32mp2_init_hwinfo(void)
   // board_rev = get_board_revision();
   add_typed_string(_CS_MACHINE, "STM32MP257F-DK Board (MB1605 Var1.0 Rev.C-01)");  /* Name of the hardware type on which the system is running */
   add_typed_string(_CS_HW_PROVIDER, "STMicroelectronics");
-  add_typed_string(_CS_ARCHITECTURE, "--- dummy arch ---");  /* Name of the instructions set architechure */
-  add_typed_string(_CS_HW_SERIAL, stm32mp2_get_board_serial());  /* A serial number assiciated with the hardware */
+  add_typed_string(_CS_ARCHITECTURE, "unknown architecture");  /* Name of the instructions set architechure */
+  add_typed_string(_CS_HW_SERIAL, UID);  /* A serial number assiciated with the hardware */
 
-  // add_typed_string(_CS_HOSTNAME, "--- dummy value ---");  /* Name of this node within the communications network */
-  // add_typed_string(_CS_RELEASE, "--- dummy value ---");  /* Current release level of this implementation */
-  // add_typed_string(_CS_VERSION, "--- dummy value ---");  /* Current version of this release */
-  // add_typed_string(_CS_HW_PROVIDER, "--- dummy value ---");  /* The name of the hardware manufacturers */
-  // add_typed_string(_CS_SYSNAME, "--- dummy value ---");  /* Name of this implementation of the operating system */
+  // add_typed_string(_CS_HOSTNAME, "unknown hostname");  /* Name of this node within the communications network */
+  // add_typed_string(_CS_RELEASE, "unknown release");  /* Current release level of this implementation */
+  // add_typed_string(_CS_VERSION, "unknown version");  /* Current version of this release */
+  add_typed_string(_CS_HW_PROVIDER, "STMicroelectronics");  /* The name of the hardware manufacturers */
+  // add_typed_string(_CS_SYSNAME, "unknown sysname");  /* Name of this implementation of the operating system */
 }
 
 #if defined(__QNXNTO__) && defined(__USESRCVERSION)

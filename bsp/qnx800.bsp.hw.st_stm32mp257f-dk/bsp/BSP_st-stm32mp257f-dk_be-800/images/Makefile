@@ -20,12 +20,12 @@ INSTALL=$(CURDIR)/../install
 
 all: ifs-$(BOARD).bin
 
-# to boot QNX ifs-rpi5.bin IFS image, add "kernel=ifs-rpi5.bin" to bootable microSD card config.txt file.
+# to boot QNX ifs-stm32mp257f-dk.bin IFS image, add "kernel=ifs-stm32mp257f-dk.bin" to bootable microSD card config.txt file.
 ifs-$(BOARD).bin: $(BOARD).build
 	$(HOST_MKIFS) -v -r$(INSTALL) $(MKIFSFLAGS) $^ $@
 
 # To boot from U-boot "go" command:
-#  - load ifs-rpi5.raw IFS image to ${IMAGE_LOAD_ADDR}
+#  - load ifs-stm32mp257f-dk.raw IFS image to ${IMAGE_LOAD_ADDR}
 #  - run "go ${IMAGE_LOAD_ADDR} ${fdtcontroladdr}"
 ifs-$(BOARD).raw: $(BOARD).build
 	$(CP_HOST) $(BOARD).build $(BOARD)-go.build
