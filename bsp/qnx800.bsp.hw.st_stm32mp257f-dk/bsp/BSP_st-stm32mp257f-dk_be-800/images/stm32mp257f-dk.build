@@ -9,7 +9,7 @@
 [image=0x8a000000]
 [virtual=aarch64le,raw -compress] boot = {
     ## Use -W flag to enable/disable watchdog
-    startup-stm32mp257f-dk -v -u reg -a
+    startup-stm32mp257f-dk -v -u reg -a -W
     PATH=/proc/boot:/sbin:/bin:/usr/bin:/usr/sbin:/usr/libexec LD_LIBRARY_PATH=/proc/boot:/lib:/usr/lib:/lib/dll:/lib/dll/pci procnto-smp-instr -v
 }
 
@@ -37,8 +37,8 @@
     ## WatchDog utility
     ## If startup is given -W parameter then the wdtkick utility MUST be uncommented below
     ############################################################################################
-    display_msg "Starting WatchDog ..."
-    wdtkick -a 0x44020000 -l 0x400 -t 1000 -W0x00:0x00005555
+    display_msg "Starting WatchDog (smc-id: 0xbc000000)..."
+    wdtkick -i 0xbc000000 -t 1000 -v
 
     ############################################################################################
     ## PCIe driver
