@@ -244,21 +244,27 @@ int main(const int argc, char *argv[])
     struct smc_args args = {0};
     struct smc_res  res  = {0};
 
-    printf("%s : start main kick loop\n", wdi.name);
-    slogf(_SLOG_SETCODE(_SLOGC_CHAR, 0), _SLOG_INFO,"%s:  start main kick loop", wdi.name);
+    slogf(_SLOG_SETCODE(_SLOGC_CHAR, 0), _SLOG_INFO,"%s: start main kick loop", wdi.name);
+
+    size_t run_cnt = 0;
+    const size_t heartbeat_msg_interval_ms = 15000; /* 15 seconds */
 
     while (1) {
-        args.a0 = PSCI_ARM_WDT_SMC_ID;  // wdi.smc_id;  /* SMC function ID, e.g. an OP-TEE/PSCI/SiP call ID */
+        args.a0 = wdi.smc_id;  /* SMC function ID, e.g. an OP-TEE/PSCI/SiP call ID */
         args.a1 = SMCWD_PET;   /* param1 */
         args.a2 = 0;           /* param2 */
         args.a3 = 0;           /* param3 */
         smc_call(&args, &res);
         delay((unsigned int)wdi.kick_time);
+        run_cnt++;
+        if(wdi.verbose && (run_cnt * wdi.kick_time) % heartbeat_msg_interval_ms == 0) {
+            slogf(_SLOG_SETCODE(_SLOGC_CHAR, 0), _SLOG_INFO,"%s: watchdog timer kicked %zu times", wdi.name, run_cnt);
+        }
     }
 
     // Disable IO capability.
     if (ThreadCtl( _NTO_TCTL_IO_LEVEL, _NTO_IO_LEVEL_NONE ) == -1) {
-        slogf(_SLOG_SETCODE(_SLOGC_CHAR, 0), _SLOG_INFO,"wdtkick: failure to disable IO capability");
+        slogf(_SLOG_SETCODE(_SLOGC_CHAR, 0), _SLOG_INFO,"%s: failure to disable IO capability", wdi.name);
         return EXIT_FAILURE;
     }
 
