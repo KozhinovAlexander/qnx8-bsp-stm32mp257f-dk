@@ -163,9 +163,6 @@ int main(const int argc, char **const argv, const char **const envv)
 
     /* Initialize the Hwinfo section of the Syspage */
     init_hwinfo();
-    stm32mp2_init_hwinfo();
-
-    // init_gpio_aon_bcm();
 
     /* TODO: Implement following functions (see: startup/lib/public/startup.h)
      * see also: https://www.qnx.com/developers/docs/8.0/com.qnx.doc.neutrino.building/topic/startup/startup_source_struct.html

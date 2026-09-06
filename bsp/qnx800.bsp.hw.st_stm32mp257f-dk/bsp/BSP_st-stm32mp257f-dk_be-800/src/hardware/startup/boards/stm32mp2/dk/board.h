@@ -37,8 +37,11 @@
 #define STM32MP2_HSE_CLOCK_FREQ   40'000'000
 
 /** STM32MP2 USART2 base address and size */
-#define STM32_USART2_BASE_ADDR  (0x400e0000UL)  /* RM0457 Rev 5, page 248/5881 */
-#define STM32_UART_SIZE         (0x400UL)  /* RM0457 Rev 5, page 248/5881 */
+#define STM32_USART2_BASE_ADDR        (0x400e0000UL)  /* RM0457 Rev 5, page 248/5881 */
+#define STM32_UART_SIZE               (0x400UL)  /* RM0457 Rev 5, page 248/5881 */
+#define STM32MP2_UART2_IRQ            (147)  /* UART2 IRQ number for EXTI1 */
+#define STM32MP2_UART2_EXTI1_IRQ      (27)  /* UART2 IRQ number for EXTI1 */
+#define STM32MP2_UART_CLOCK_FREQ      (64000000UL)   /* UART2 clock frequency in Hz */
 
 /*!
  * @name QNX SDRAM memory configuration
@@ -82,6 +85,11 @@
 
 /* Use iwdg1 watchdog */
 #define STM32MP2_IWDG_BASE   STM32MP2_IWDG1_BASE
+
+#define STM32MP2_ETH1_MAC_BASE    (0x482C0000UL)
+#define STM32MP2_ETH1_MAC_SIZE    (0x4000UL)  /* 16KB */
+#define STM32MP2_ETH1_MAC_IRQ     (130)  /* Example IRQ number for ETH1 */
+#define STM32MP2_ETH_HWI_SGEM     "stmmaceth"
 
 #endif  /* BOARD_H_ */
 
