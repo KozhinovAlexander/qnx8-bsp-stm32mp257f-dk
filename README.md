@@ -31,6 +31,7 @@ After cloning this project refer to [Getting Started](./docs/getting_started.md)
 | **GIC**          | GIC (GICv2)                                        |      x      |
 | **Ethernet**     | Gigabit RGMII                                      |      x      |
 | **USB**          | USB 2.0 HS x2, USB 3.0 SuperSpeed Type-C           |      x      |
+| **WDT**          | wdtkick for watchdog (iwdg1) running in OP-TEE     |      v      |
 
 ---
 
