@@ -361,7 +361,7 @@ void stm32mp2_init_uart(unsigned channel, const char *init, const char *defaults
     struct stm32_uart_handle_s huart;
     struct stm32_uart_init_s uart_cfg;
 
-    huart.clockfreq = 64000000;  /* default peripheral clock rate is 64MHz */
+    huart.clockfreq = STM32MP2_UART_CLOCK_FREQ;  /* default peripheral clock rate is 64MHz */
 
     /*
      * Default UART settings:

@@ -9,7 +9,7 @@
 [image=0x8a000000]
 [virtual=aarch64le,raw -compress] boot = {
     ## Use -W flag to enable/disable watchdog
-    startup-stm32mp257f-dk -v -u reg -a -W
+    startup-stm32mp257f-dk -v -u reg -a -U -W
     PATH=/proc/boot:/sbin:/bin:/usr/bin:/usr/sbin:/usr/libexec LD_LIBRARY_PATH=/proc/boot:/lib:/usr/lib:/lib/dll:/lib/dll/pci procnto-smp-instr -v
 }
 
@@ -45,24 +45,20 @@
     ############################################################################################
     # ksh /proc/boot/pci_server_start.sh
 
-
     #######################################################################
-    ## Debug console serial driver
+    ## (Debug) Serial driver
     #######################################################################
-    display_msg "Starting serial driver (/dev/ser10)"
-    # devc-serpl011-rpi5 -b115200 -c44236800 -e -F -u10 -D 0x107d001000^2,153
-
+    ## UART2 is used for the QNX console
+    display_msg Starting Serial driver (/dev/ser2)...
+    # devc-ser-stm32mp2 -e -F -S -u 2 -c 64000000 0x400e0000,59
+    # waitfor /dev/ser2
+    # on -t /dev/ser2 /bin/sh
 
     #######################################################################
     ## SPI driver
     #######################################################################
     display_msg "Starting SPI driver"
-    # gpio-rp1 set 7-8 a0 pu
-    # gpio-rp1 set 9-11 a0 pd
-
     # spi-dwc -c /etc/system/config/spi/spi.conf
-
-
 
     #######################################################################
     ## SD memory card / eMMC driver
@@ -73,36 +69,28 @@
     # sh -c "devb-sdmmc-stm32mp257f sdio addr=0x1000fff000,irq=305 disk name=sd > /dev/null 2>&1"
     # waitfor /dev/sd0
 
-
-
     #######################################################################
     ## USB OTG Host Controller driver
     #######################################################################
     # ksh /proc/boot/usb_start.sh
 
-
     ############################################################################################
     ## Storage service
     ############################################################################################
-    # /proc/boot/.storage-server.sh
-
+    /proc/boot/.storage-server.sh
 
     ############################################################################################
     ## Network driver
     ############################################################################################
-    # ksh /proc/boot/net_start.sh
-
+    ksh /proc/boot/net_start.sh
 
     ############################################################################################
     ## Customize startup components
     ############################################################################################
     ksh /proc/boot/customize_startup.sh
 
-
     # ksh /proc/boot/uart4_console.sh
     # ksh /proc/boot/i2c_start.sh
-    # ksh /proc/boot/fan_start.sh
-
 
     ############################################################################################
     ## Start the main shell
@@ -127,17 +115,15 @@
 ################################################################################################
 /bin/wdtkick=wdtkick
 
-
 ################################################################################################
 ## Serial drivers
 ################################################################################################
-# /sbin/devc-serpl011-rpi5=devc-serpl011-rpi5
-
+# /sbin/devc-ser-stm32mp2=devc-ser-stm32mp2
 
 ################################################################################################
 ## NOR flash driver files
 ################################################################################################
-# /sbin/devf-ram=devf-ram
+/sbin/devf-ram=devf-ram
 
 # /usr/bin/flashctl=flashctl
 
@@ -157,7 +143,6 @@
 /lib/dll/cam-cdrom.so=cam-cdrom.so
 /lib/dll/fs-qnx6.so=fs-qnx6.so
 /lib/dll/fs-dos.so=fs-dos.so
-
 
 ################################################################################################
 ## Storage script
@@ -305,7 +290,6 @@ fi
 }
 
 
-
 ################################################################################################
 ## USB host drivers
 ################################################################################################
@@ -314,8 +298,8 @@ fi
 ################################################################################################
 ## USB host shared libraries
 ################################################################################################
-# /lib/libhiddi.so=libhiddi.so
-# /lib/libusbdi.so=libusbdi.so
+/lib/libhiddi.so=libhiddi.so
+/lib/libusbdi.so=libusbdi.so
 
 ################################################################################################
 ## USB host driver and support
@@ -329,7 +313,6 @@ fi
 ################################################################################################
 /lib/libusbdci.so=libusbdci.so
 
-
 ################################################################################################
 ## I2C drivers
 ################################################################################################
@@ -340,7 +323,6 @@ fi
 ################################################################################################
 /bin/isendrecv=isendrecv
 /bin/isend=isend
-
 
 ################################################################################################
 ## PCI driver HW Modules and configuration file
@@ -758,35 +740,8 @@ usb_start.sh = {
 #!/bin/sh
   echo "Starting USB xHCI controller in the host mode (/dev/usb/*)..."
 
-  # gpio-rp1 set 42 a2 pn
-  # gpio-rp1 set 43 a2 pu
-
   # io-usb-otg -v -d dwc3-xhci ioport=0x1f00200000,irq=0xbf,iosize=0x100000,bmstr=0x1000000000,ioport=0x1f00300000,irq=0xc4,iosize=0x100000,bmstr=0x1000000000
   # waitfor /dev/usb/io-usb-otg 10
-}
-
-uart4_console.sh = {
-  #!/bin/sh
-  echo "Start uart4 (gpio12-pin32, gpio13-pin33) console"
-
-  # gpio-rp1 set 12 a2 pn
-  # gpio-rp1 set 13 a2 pu
-
-  # devc-serpl011-rpi5 -b115200 -v -c50000000 -e -F -u4 0x1f00040000,0xcd &
-  # waitfor /dev/ser4
-  # on -t /dev/ser4 /bin/sh
-}
-
-uart2_console.sh = {
-  #!/bin/sh
-  echo "Start uart2 (gpioi4-pin7, gpio5-pin29) console"
-
-  # gpio-rp1 set 4 a2 pn
-  # gpio-rp1 set 5 a2 pu
-
-  # devc-serpl011-rpi5 -b115200 -v -c50000000 -e -F -u2 0x1f00038000,0xcb &
-  # waitfor /dev/ser2
-  # on -t /dev/ser2 /bin/sh
 }
 
 ################################################################################################
@@ -796,14 +751,14 @@ net_start.sh = {
 
 #!/bin/sh
 
-# config ETH_RST_N/GPIO32 pin
-# gpio-rp1 set 32 op pd dh
-
 ############################################################################################
 ## Network driver
 ############################################################################################
 echo "Starting networking ..."
-io-sock -m phy -m fdt -d cgem -m usb -d axe -d axge -d cdce -d smsc
+# io-sock -m phy -m fdt -d cgem -m usb -d axe -d axge -d cdce -d smsc
+# on -A nonroot,allow,interrupt io-sock -m phy -m fdt -d cgem -m usb -d axe -d axge -d cdce -d smsc
+# io-sock-diag -d ffec -d igc -d ix -d re -d rt -d axe -d axge -d cdce -d smsc -d ure -d stmmaceth
+io-sock -d axe -d axge -d cdce -d smsc -d stmmaceth
 
 echo "Starting DHCP client ..."
 dhcpcd -bqq
@@ -815,6 +770,7 @@ dhcpcd -bqq
 ############################################################################################
 ## SSH Server
 ############################################################################################
+echo "Starting SSH server ..."
 /proc/boot/.ssh-server.sh
 
 ############################################################################################
@@ -822,6 +778,9 @@ dhcpcd -bqq
 ##  - refer to the help documentation for the gdb, qconn and the IDE
 ##    for more information on remote debugging
 ##  - the commands shown require that NETWORK is enabled too
+##  - DO NOT ADD TO PRODUCTION SYSTEM. The qconn daemon lets anyone run any application
+##    on your target system as the superuser, which creates a huge security risk.
+##    source: https://www.qnx.com/developers/docs/8.0/com.qnx.doc.neutrino.custom_bsp/topic/networking.html
 ############################################################################################
 devc-pty
 qconn
@@ -850,33 +809,9 @@ i2c_start.sh = {
 #!/bin/sh
 
 echo "Starting I2C driver"
-# gpio-rp1 set 2 a3 pu
-# gpio-rp1 set 3 a3 pu
 # i2c-dwc-rpi5 -p0x1f00074000 -c200000000 -q0xa8 --u1
 
 }
-
-################################################################################################
-## fan control
-################################################################################################
-fan_start.sh = {
-#!/bin/sh
-
-echo "Starting fan control driver"
-
-# gpio 45 is congiured as PWM1_CHAN3 to drive fan
-# gpio-rp1 set 45 a0 pd
-# fan-rpi5
-# waitfor /dev/fan
-# echo 200 > /dev/fan
-}
-
-################################################################################################
-## GPIO utility
-################################################################################################
-# /bin/gpio-aon-bcm=gpio-aon-bcm
-# /bin/gpio-bcm=gpio-bcm
-# /bin/gpio-rp1=gpio-rp1
 
 ################################################################################################
 ## Mailbox utility
