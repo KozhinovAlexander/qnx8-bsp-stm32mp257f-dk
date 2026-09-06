@@ -259,13 +259,13 @@ copy_boot_part_content:
 # please refer to: https://www.qnx.com/developers/docs/BSP8.0/com.qnx.doc.bsp_raspberrypi.bcm2712.rpi5_8.0/topic/common/build_commandline.html
 # for make file flags refer to: https://www.qnx.com/developers/docs/6.5.0SP1.update/com.qnx.doc.neutrino_prog/make_convent.html#PARTIAL
 .PHONY: bsp_all
-EXCLUDE_FROM_BUILD_LIST := i2c spi SPI fan gpio-aon-bcm gpio-bcm gpio-rp1 mbox msix-rp1 devb
+EXCLUDE_FROM_BUILD_LIST := i2c spi SPI fan gpio-aon-bcm gpio-bcm gpio-rp1 mbox msix-rp1 devb devc
 MAKE_LIST_EXCLUDE := LIST=CONTROL "EXCLUDE_CONTROLLIST=$(EXCLUDE_FROM_BUILD_LIST)"
 bsp_all:
 	@mkdir -p $(BSP_ROOT_DIR)/install
 	@source $(QNX_INSTALL_DIR)/qnxsdp-env.sh \
 		&& $(MAKE) JLEVEL=$$(nproc) -C$(BSP_ROOT_DIR)/images clean \
-		&& $(MAKE) JLEVEL=$$(nproc) -C$(BSP_ROOT_DIR) LIST=CONTROL $(MAKE_LIST_EXCLUDE) all \
+		&& $(MAKE) JLEVEL=$$(nproc) -C$(BSP_ROOT_DIR) $(MAKE_LIST_EXCLUDE) all \
 		&& $(MAKE) JLEVEL=$$(nproc) -C$(BSP_ROOT_DIR)/images $(MAKE_LIST_EXCLUDE) ifs-$(BOARD).raw
 	@$(MAKE) bsp_prebuilt
 	@$(MAKE) tftp_server_transfer FILE=$(BSP_ROOT_DIR)/images/ifs-$(BOARD).raw
@@ -280,3 +280,7 @@ bsp_clean:
 	@source $(QNX_INSTALL_DIR)/qnxsdp-env.sh \
 		&& $(MAKE) JLEVEL=$$(nproc) -C $(BSP_ROOT_DIR)/images clean \
 		&& $(MAKE) JLEVEL=$$(nproc) -C $(BSP_ROOT_DIR) clean
+
+.PHONY: restart_target
+restart_target:
+	@$(STM32_Programmer_CLI) -c port=jtag reset=HWrst > /dev/null 2>&1 || true
