@@ -38,8 +38,8 @@
 
 #define STM32_WDT_ENABLE  (1 << 1)  /* watchdog enable */
 
-/* Callout prototype */
-extern struct callout_rtn reboot_stm32mp2;
+/* Callout prototypes */
+// extern struct callout_rtn custom_kick_wdt;  /* Callout for watchdog kick function */
 
 const struct callout_slot callouts[] = {
     {
@@ -107,6 +107,17 @@ int main(const int argc, char **const argv, const char **const envv)
         }
     }
 
+    void *f = fdt;
+    if(f == NULL) {
+      kprintf("No FDT table\n");
+    } else {
+      kprintf("FDT table found at 0x%lx\n", (unsigned long)f);
+    }
+
+    if(fdt_psci_configure()) {
+        kprintf("Failed to configure PSCI\n");
+    }
+
     /* TF-A of stm32mp2 already providing watchdog and
      * it's interface to OS over SMCCC as arm,smc-wdt dts entity
      */
@@ -156,7 +167,9 @@ int main(const int argc, char **const argv, const char **const envv)
 
     // init_gpio_aon_bcm();
 
-    /* TODO: Implement following functions (see: startup/lib/public/startup.h)*/
+    /* TODO: Implement following functions (see: startup/lib/public/startup.h)
+     * see also: https://www.qnx.com/developers/docs/8.0/com.qnx.doc.neutrino.building/topic/startup/startup_source_struct.html
+     */
     // void init_raminfo(void);
     // void init_intrinfo(void);
     // void init_qtime(void);
