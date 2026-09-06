@@ -244,6 +244,7 @@ sdcard_provision:
 		sudo mkfs.vfat -F 32 $(SD_CARD_DEV)$$pre_last_part;
 	@$(MAKE) copy_boot_part_content SD_CARD_DEV=$(SD_CARD_DEV)
 
+.PHONY: copy_boot_part_content
 copy_boot_part_content:
 	@echo "Copying boot partition content to SD card"; \
 		last_part=$$(sudo parted -s $(SD_CARD_DEV) print | awk '/^ *[0-9]+/ {n=$$1} END {print n}'); \
@@ -258,7 +259,7 @@ copy_boot_part_content:
 # please refer to: https://www.qnx.com/developers/docs/BSP8.0/com.qnx.doc.bsp_raspberrypi.bcm2712.rpi5_8.0/topic/common/build_commandline.html
 # for make file flags refer to: https://www.qnx.com/developers/docs/6.5.0SP1.update/com.qnx.doc.neutrino_prog/make_convent.html#PARTIAL
 .PHONY: bsp_all
-EXCLUDE_FROM_BUILD_LIST := i2c spi SPI fan gpio-aon-bcm gpio-bcm gpio-rp1 mbox msix-rp1 devc devb
+EXCLUDE_FROM_BUILD_LIST := i2c spi SPI fan gpio-aon-bcm gpio-bcm gpio-rp1 mbox msix-rp1 devb
 MAKE_LIST_EXCLUDE := LIST=CONTROL "EXCLUDE_CONTROLLIST=$(EXCLUDE_FROM_BUILD_LIST)"
 bsp_all:
 	@mkdir -p $(BSP_ROOT_DIR)/install
@@ -269,6 +270,7 @@ bsp_all:
 	@$(MAKE) bsp_prebuilt
 	@$(MAKE) tftp_server_transfer FILE=$(BSP_ROOT_DIR)/images/ifs-$(BOARD).raw
 
+.PHONY: bsp_prebuilt
 bsp_prebuilt:
 	@mkdir -p $(BSP_ROOT_DIR)/prebuilt
 	@cp -r $(BSP_ROOT_DIR)/install/* $(BSP_ROOT_DIR)/prebuilt
