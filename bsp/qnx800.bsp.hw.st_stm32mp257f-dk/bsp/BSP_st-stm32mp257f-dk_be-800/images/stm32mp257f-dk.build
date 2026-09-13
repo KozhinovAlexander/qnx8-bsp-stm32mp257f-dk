@@ -181,6 +181,11 @@ fi
 /lib/dll/devs-cdce.so=devs-cdce.so
 /lib/dll/devs-smsc.so=devs-smsc.so
 
+/lib/dll/devs-ffec.so=devs-ffec.so
+/lib/dll/devs-dwceqos.so=devs-dwceqos.so
+
+# /lib/dll/devs-dwmac-stm32mp2.so=devs-dwmac-stm32mp2.so
+
 ################################################################################################
 ## Network driver shared libraries
 ################################################################################################
@@ -756,9 +761,13 @@ net_start.sh = {
 ############################################################################################
 echo "Starting networking ..."
 # io-sock -m phy -m fdt -d cgem -m usb -d axe -d axge -d cdce -d smsc
-# on -A nonroot,allow,interrupt io-sock -m phy -m fdt -d cgem -m usb -d axe -d axge -d cdce -d smsc
-# io-sock-diag -d ffec -d igc -d ix -d re -d rt -d axe -d axge -d cdce -d smsc -d ure -d stmmaceth
-io-sock -d axe -d axge -d cdce -d smsc -d stmmaceth
+
+# CHECK: on -A nonroot,allow,interrupt io-sock ...
+
+# TODO: add -m fdt to io-sock
+# TODO: check slog2info for failed drivers and drop them bwelow
+io-sock -m phy -m phy_fdt -m usb -d ffec -d dwceqos -d em -d ix -d re -d axe -d axge -d cdce -d smsc
+waitfor /dev/socket
 
 echo "Starting DHCP client ..."
 dhcpcd -bqq
