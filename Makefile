@@ -269,6 +269,7 @@ bsp_all:
 		&& $(MAKE) JLEVEL=$$(nproc) -C$(BSP_ROOT_DIR)/images $(MAKE_LIST_EXCLUDE) ifs-$(BOARD).raw
 	@$(MAKE) bsp_prebuilt
 	@$(MAKE) tftp_server_transfer FILE=$(BSP_ROOT_DIR)/images/ifs-$(BOARD).raw
+	@$(MAKE) tftp_server_transfer FILE=$(BSP_ROOT_DIR)/images/ifs-$(BOARD).bin
 
 .PHONY: bsp_prebuilt
 bsp_prebuilt:
@@ -283,4 +284,4 @@ bsp_clean:
 
 .PHONY: restart_target
 restart_target:
-	@$(STM32_Programmer_CLI) -c port=jtag reset=HWrst > /dev/null 2>&1 || true
+	@sudo $(STM32_Programmer_CLI) -c port=jtag reset=HWrst
