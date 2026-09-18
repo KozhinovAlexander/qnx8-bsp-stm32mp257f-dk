@@ -1360,8 +1360,6 @@ driver_t sample_driver = {
 	sizeof(struct sam_softc),
 };
 
-static devclass_t sam_devclass;
-
 /*
  * The sample driver is showing how the device name and module name
  * can be different.
@@ -1369,7 +1367,7 @@ static devclass_t sam_devclass;
  * Most FreeBSD drivers will use the same name for the driver,
  * device and the module.
  */
-DRIVER_MODULE(sample, simplebus, sample_driver, sam_devclass, 0);
+DRIVER_MODULE(sample, simplebus, sample_driver, NULL, NULL);
 /*
  * Since the second parameter of the DRIVER_MODULE macro is the bus name,
  * the driver device name is used in the following and not the sample
@@ -1377,9 +1375,9 @@ DRIVER_MODULE(sample, simplebus, sample_driver, sam_devclass, 0);
  * DRIVER_MODULE(modname, busname, driver_t driver, modeventhand_t evh,
  *     void *arg);
  */
-DRIVER_MODULE(miibus, sam, miibus_driver, miibus_devclass, 0);
+DRIVER_MODULE(miibus, sam, miibus_driver, NULL, NULL);
 #ifdef INCLUDE_ETHERSWITCH
-DRIVER_MODULE(etherswitch, sam, etherswitch_driver, etherswitch_devclass, 0);
+DRIVER_MODULE(etherswitch, sam, etherswitch_driver, NULL, NULL);
 #endif
 MODULE_DEPEND(sample, ether, 1, 1, 1);
 MODULE_DEPEND(sample, miibus, 1, 1, 1);
