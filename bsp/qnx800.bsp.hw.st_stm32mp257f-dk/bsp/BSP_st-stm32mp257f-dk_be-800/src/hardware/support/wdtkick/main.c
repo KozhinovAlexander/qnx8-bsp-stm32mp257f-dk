@@ -184,7 +184,7 @@ static int wd_configure_thread(wdt_init_t *wdi)
      * as the damage to your system could be substantial.
      */
     // Enable IO capability.
-    if (ThreadCtl( _NTO_TCTL_IO_LEVEL, _NTO_IO_LEVEL_2 ) == -1) {
+    if (ThreadCtl( _NTO_TCTL_IO_LEVEL, (void *)_NTO_IO_LEVEL_2 ) == -1) {
         slogf(_SLOG_SETCODE(_SLOGC_CHAR, 0), _SLOG_INFO,"wdtkick: failure to acquire IO level 2 capability");
         return EXIT_FAILURE;
     }
@@ -263,7 +263,7 @@ int main(const int argc, char *argv[])
     }
 
     // Disable IO capability.
-    if (ThreadCtl( _NTO_TCTL_IO_LEVEL, _NTO_IO_LEVEL_NONE ) == -1) {
+    if (ThreadCtl( _NTO_TCTL_IO_LEVEL, (void *)_NTO_IO_LEVEL_NONE ) == -1) {
         slogf(_SLOG_SETCODE(_SLOGC_CHAR, 0), _SLOG_INFO,"%s: failure to disable IO capability", wdi.name);
         return EXIT_FAILURE;
     }
