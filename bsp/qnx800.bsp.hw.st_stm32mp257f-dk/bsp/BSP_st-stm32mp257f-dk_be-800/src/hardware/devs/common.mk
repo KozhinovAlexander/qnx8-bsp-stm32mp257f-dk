@@ -4,20 +4,17 @@ endif
 
 include $(QCONFIG)
 
-INSTALLDIR=lib/dll
-
-# LIBS += slog2
-
 define PINFO
-PINFO DESCRIPTION=Sample io-sock module
+PINFO DESCRIPTION=Sample io-sock fdt mac driver
 endef
 
-EXTRA_CLEAN+= $(PROJECT_ROOT)/mod-dwmac-stm32.use
+INTERFACE_PREFIX="sam"
 
-define MODULE_SPECIFIC_OPTIONS
+define DRIVER_SPECIFIC_OPTIONS
 
-This can specify any module information
+The following sysctls are create by this driver:
+hw.sample.debug
 
 endef
 
-include devs/mods.mk
+include devs/devs.mk
