@@ -46,7 +46,7 @@
 #include <dev/etherswitch/etherswitch.h>
 #include "etherswitch_if.h"
 #endif
-#include "sample.h"
+#include "dwmac-stm32.h"
 
 #define SAMPLE_LOCK(sc) mtx_lock(&(sc)->mtx)
 #define SAMPLE_UNLOCK(sc) mtx_unlock(&(sc)->mtx)
