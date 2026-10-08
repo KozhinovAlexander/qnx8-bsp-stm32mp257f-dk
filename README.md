@@ -23,12 +23,11 @@ After cloning this project refer to [Getting Started](./docs/getting_started.md)
 
 | Component        | Details                                            | Implemented |
 |------------------|----------------------------------------------------|-------------|
-| **SoC**          | STM32MP257FAK3                                     |      x      |
-| **CPU**          | Dual Cortex-A35 @ 1.5 GHz (AArch64) + Cortex-M33   |      x      |
+| **CPU**          | Dual Cortex-A35 @ 1.5 GHz (AArch64) + Cortex-M33   |      v      |
 | **RAM**          | 4 GB LPDDR4                                        |      v      |
 | **Storage**      | eMMC + microSD                                     |      x      |
 | **Debug UART**   | USART2 @ `0x400e0000`, 115200 8N1 (via ST-LINK/V3) |      v      |
-| **GIC**          | GIC (GICv2)                                        |      x      |
+| **GIC**          | GIC (GICv2)                                        |      v      |
 | **Ethernet**     | Gigabit RGMII                                      |      x      |
 | **USB**          | USB 2.0 HS x2, USB 3.0 SuperSpeed Type-C           |      x      |
 | **WDT**          | wdtkick for watchdog (iwdg1) running in OP-TEE     |      v      |
